@@ -44,8 +44,12 @@ def getcolor(argument):
             "greyple" : 0x99aab5,
     }
     argument = argument.replace(' ', "_").lower()
-    return switcher.get(argument, "0x2ecc71")
-embedcolor = getcolor(embedcolor)
+    return switcher.get(argument, "")
+if config["randomcolor"] == "true":
+    randomizecolor = True
+else:
+    embedcolor = getcolor(embedcolor)
+
 bot = commands.Bot(command_prefix=";")
 @bot.event
 async def on_ready():
@@ -63,6 +67,10 @@ async def on_message(message):
     args = content.split(" ")
     command = args[0].lower().replace(prefix, "")
     args.pop(0)
+    if content.startswith(prefix):
+        pass
+    else:
+        return
     if command == "ping":
         await message.delete()
         print('e')
@@ -117,7 +125,10 @@ async def on_message(message):
             filename = f"recaptcha-{random.randint(1, 500)}.png"
             open(filename, 'wb').write(r.content)
             filee = discord.File(f"./{filename}", filename=filename)
-            embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
+            if randomizecolor:
+                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
+            else:
+                embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
             embedd.set_image(url=f"attachment://{filename}")
             await message.channel.send(file=filee, embed=embedd)
             os.remove(filename)
@@ -127,7 +138,10 @@ async def on_message(message):
             filename = f"noargs-recaptcha-${random.randint(1, 500)}.png"
             open(filename, 'wb').write(r.content)
             ilee = discord.File(f"./{filename}", filename=filename)
-            embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
+            if randomizecolor:
+                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
+            else:
+                embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
             embedd.set_image(url=f"attachment://{filename}")
             await message.channel.send(file=filee, embed=embedd)
             os.remove(filename)
@@ -136,16 +150,22 @@ async def on_message(message):
             for user in message.mentions:
                 url = user.avatar_url
                 if url:
-                    embed=discord.Embed(color=embedcolor, description="Walter's Selfbot")
+                    if randomizecolor:
+                        embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
+                    else:
+                        embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
                     embed.set_author(name=f"{message.mentions[0].name}'s Avatar")
                     embed.set_thumbnail(url=url)
                     await message.channel.send(embed=embed)
         else:
             url = bot.user.avatar_url
-            embed=discord.Embed(color=embedcolor, description="Walter's Selfbot")
-            embed.set_author(name=f"{bot.user.name}'s Avatar")
-            embed.set_thumbnail(url=url)
-            await message.channel.send(embed=embed)
+            if randomizecolor:
+                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
+            else:
+                embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
+            embedd.set_author(name=f"{bot.user.name}'s Avatar")
+            embedd.set_thumbnail(url=url)
+            await message.channel.send(embed=embedd)
     if command == "spam":
         await message.delete()
         limit = int(args[0])
@@ -161,8 +181,10 @@ async def on_message(message):
             r = requests.get(url, allow_redirects=True)
             filename = f"{random.randint(1,100)}-tmpimageembed.png"
             open(filename, 'wb').write(r.content)
+            filename = filename
         else:
             if args:
+                
                 if args[0].startswith('https://') or args[0].startswith('http://'):
                     url = args[0]
                 else:
@@ -172,18 +194,43 @@ async def on_message(message):
                 await message.channel.send('Please provide link/image.', delete_after=3)
                 return
         await message.delete()
-        e = discord.Embed(color=embedcolor)
+        
+        if randomizecolor:
+                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
+        else:
+            embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
         e.set_image(url=url)    
         await message.channel.send(embed=e)
-        os.remove(filename)
+        if message.attachements:
+            os.remove(filename)
+        
     if command == "embed":
         await message.delete()
         t = " ".join(args).split(",")
         if len(t) == 1:
-            e = discord.Embed(color=embedcolor, title=t[0])
+            if randomizecolor:
+                e = discord.Embed(color=discord.Color.random(), description=t[0])
+            else:
+                e = discord.Embed(color=embedcolor,description=t[0])
+            
             await message.channel.send(embed=e)
         elif len(t) == 2 or len(t) > 2:
-            e = discord.Embed(color=embedcolor, title=t[0], description=t[1])
+            if randomizecolor:
+                e = discord.Embed(color=discord.Color.random(), title=t[0], description=t[1])
+            else:
+                e = discord.Embed(color=embedcolor, title=t[0], description=t[1])
+            
             await message.channel.send(embed=e)
-        
+    if command == 'ghostping':
+        await message.delete()
+        limit = int(args[0])
+        args.pop(0)
+        if "--id" in content:
+            content = content.replace('--id', "")
+            msg = f"<@!{args[0]}>"
+        else:
+            msg = " ".join(args)
+        for i in range(limit):
+            await message.channel.send(msg, delete_after=0.3)
+            await asyncio.sleep(0.4)
 bot.run(token, bot=False)
