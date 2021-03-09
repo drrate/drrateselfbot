@@ -178,11 +178,11 @@ async def on_message(message):
         os.remove(filename)
     if command == "embed":
         await message.delete()
-        t = " ".join(args).split(',')
-        if len(args) == 1:
+        t = " ".join(args).split(",")
+        if len(t) == 1:
             e = discord.Embed(color=embedcolor, title=t[0])
             await message.channel.send(embed=e)
-        elif len(args) > 2:
+        elif len(t) == 2 or len(t) > 2:
             e = discord.Embed(color=embedcolor, title=t[0], description=t[1])
             await message.channel.send(embed=e)
         
