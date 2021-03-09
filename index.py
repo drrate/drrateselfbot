@@ -132,13 +132,20 @@ async def on_message(message):
             await message.channel.send(file=filee, embed=embedd)
             os.remove(filename)
     if command == "avatar":
-        for user in message.mentions:
-            url = user.avatar_url
-            if url:
-                embed=discord.Embed(color=embedcolor, description="Walter's Selfbot")
-                embed.set_author(name=f"user.name's Avatar")
-                embed.set_thumbnail(url=url)
-                await message.channel.send(embed=embed)
+        if message.mentions:
+            for user in message.mentions:
+                url = user.avatar_url
+                if url:
+                    embed=discord.Embed(color=embedcolor, description="Walter's Selfbot")
+                    embed.set_author(name=f"{message.mentions[0].name}'s Avatar")
+                    embed.set_thumbnail(url=url)
+                    await message.channel.send(embed=embed)
+        else:
+            url = bot.user.avatar_url
+            embed=discord.Embed(color=embedcolor, description="Walter's Selfbot")
+            embed.set_author(name=f"{bot.user.name}'s Avatar")
+            embed.set_thumbnail(url=url)
+            await message.channel.send(embed=embed)
     if command == "spam":
         await message.delete()
         limit = int(args[0])
@@ -169,5 +176,14 @@ async def on_message(message):
         e.set_image(url=url)    
         await message.channel.send(embed=e)
         os.remove(filename)
-
+    if command == "embed":
+        await message.delete()
+        t = " ".join(args).split(',')
+        if len(args) == 1:
+            e = discord.Embed(color=embedcolor, title=t[0])
+            await message.channel.send(embed=e)
+        elif len(args) > 2:
+            e = discord.Embed(color=embedcolor, title=t[0], description=t[1])
+            await message.channel.send(embed=e)
+        
 bot.run(token, bot=False)
