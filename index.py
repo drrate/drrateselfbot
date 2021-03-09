@@ -75,10 +75,17 @@ async def on_message(message):
         await message.delete()
         print('e')
         before = time.monotonic()
-        embedd = discord.Embed(title="Pinging..",color=embedcolor, description="Walter's Selfbot")
+        if randomizecolor:
+            embedd = discord.Embed(title="Pinging..",color=discord.Color.random(), description="Walter's Selfbot")
+        else:
+            embedd = discord.Embed(title="Pinging..",color=embedcolor, description="Walter's Selfbot")
         message = await message.channel.send(embed=embedd)
         ping = (time.monotonic() - before) * 1000
-        embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=embedcolor, description="Walter's Selfbot")
+        if randomizecolor:
+            embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=discord.Color.random(), description="Walter's Selfbot")
+        else:
+            embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=embedcolor, description="Walter's Selfbot")
+        
         await message.edit(embed=embeddd)
         print(f'Ping {int(ping)}ms')
     if command == "trump":
@@ -154,9 +161,9 @@ async def on_message(message):
                         embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
                     else:
                         embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
-                    embed.set_author(name=f"{message.mentions[0].name}'s Avatar")
-                    embed.set_thumbnail(url=url)
-                    await message.channel.send(embed=embed)
+                    embedd.set_author(name=f"{message.mentions[0].name}'s Avatar")
+                    embedd.set_thumbnail(url=url)
+                    await message.channel.send(embed=embedd)
         else:
             url = bot.user.avatar_url
             if randomizecolor:
@@ -233,4 +240,7 @@ async def on_message(message):
         for i in range(limit):
             await message.channel.send(msg, delete_after=0.3)
             await asyncio.sleep(0.4)
+    if command == "help":
+        await message.delete()
+        # not finished yet
 bot.run(token, bot=False)
