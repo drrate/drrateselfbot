@@ -3,3 +3,6 @@
 ## PS: You need config.json.
 ### example : https://raw.githubusercontent.com/ProYT303/walterselfbot/main/config.json
 ## Required modules : discord.py, requests
+
+
+# if there was errors, im retarded.
