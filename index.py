@@ -54,6 +54,7 @@ def getcolor(argument):
 if config["randomcolor"] == "true":
     randomizecolor = True
 else:
+    randomizecolor = False
     embedcolor = getcolor(embedcolor)
 
 bot = commands.Bot(command_prefix=";")
