@@ -5,4 +5,4 @@
 ## Required modules : discord.py, requests
 
 
-# if there was errors, im retarded.
+# if there was errors, pull a request to fix it, easy.
