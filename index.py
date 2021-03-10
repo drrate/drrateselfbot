@@ -12,11 +12,10 @@ print("       \\/        \\/               \\/           \\/          \\/     \\
 from discord.ext import commands
 import json, time, discord, requests, random, os, asyncio, subprocess, platform
 
-#config reading
+#config reading  
 config = open('config.json', 'r')
 config = config.read()
 config = json.loads(config)
-print(config)
 
 prefix = config["prefix"]
 whitelist = config["whitelisted"]
@@ -50,11 +49,11 @@ def getcolor(argument):
             "greyple" : 0x99aab5,
     }
     argument = argument.replace(' ', "_").lower()
-    return switcher.get(argument, "")
-if config["randomcolor"] == "true":
+    return switcher.get(argument, "") 
+if config["randomcolor"] == "true": 
     randomizecolor = True
-else:
-    randomizecolor = False
+else: 
+    randomizecolor = False 
     embedcolor = getcolor(embedcolor)
 
 bot = commands.Bot(command_prefix=";")
@@ -170,7 +169,7 @@ async def on_message(message):
                     else:
                         embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
                     embedd.set_author(name=f"{message.mentions[0].name}'s Avatar")
-                    embedd.set_thumbnail(url=url)
+                    embedd.set_image(url=url)
                     await message.channel.send(embed=embedd)
         else:
             url = bot.user.avatar_url
@@ -179,8 +178,9 @@ async def on_message(message):
             else:
                 embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
             embedd.set_author(name=f"{bot.user.name}'s Avatar")
-            embedd.set_thumbnail(url=url)
-            await message.channel.send(embed=embedd)
+            embedd.set_image(url=url)
+            await message.channel.send(embed=embedd) 
+            requests.get(url)
     if command == "spam":
         await message.delete()
         limit = int(args[0])
@@ -215,7 +215,7 @@ async def on_message(message):
         t = " ".join(args).split(",")
         if len(t) == 1:
             if randomizecolor:
-                e = discord.Embed(color=discord.Color.random(), description=t[0])
+                e = discord.Embed(color=discord.Color.random(),description=t[0])
             else:
                 e = discord.Embed(color=embedcolor,description=t[0])
             
@@ -242,9 +242,9 @@ async def on_message(message):
     if command == "help":
         await message.delete()
         if randomizecolor:
-            embed = discord.Embed(color=discord.Color.random(), description="Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
+            embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
         else:
-            embed = discord.Embed(color=embedcolor, description="Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
+            embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
         embed.add_field(name="ping", value="Measure your ping! ", inline=False)
         embed.add_field(name="trump", value="Trump said pog :flushed:", inline=True)
         embed.add_field(name="purge", value="Purge your messages!", inline=True)
@@ -255,7 +255,11 @@ async def on_message(message):
         embed.add_field(name="embed", value="Usage : <Title> <desc>.", inline=True)
         embed.add_field(name="ghostping", value="Usage : <limit> <message> / <limit> --id <userid>", inline=True)
         embed.add_field(name="ascii", value="Generates graffiti ascii art.", inline=True)
-
+        embed.add_field(name="shutdown", value="Title said it all, Shutdowns the bot.", inline=False)
+        embed.add_field(name="website", value="Pings to website to see if its down/up", inline=True)
+        embed.add_field(name="clyde", value="Beep Boop. ", inline=True)
+        embed.add_field(name="deepfry", value=":100::100::100::100::100::rofl::rofl::rofl::rofl: :ok_hand::ok_hand::ok_hand::ok_hand:", inline=True) 
+        
         await message.channel.send(embed=embed)            
     if command == "ascii":
         await message.delete()
@@ -266,7 +270,7 @@ async def on_message(message):
         asci = f"```{r.content.decode('utf8')}```"
         if len(a) < 11:
             if randomizecolor:
-                e = discord.Embed(color=discord.Color.random())
+                e = discord.Embed(color=discord.Color.random()) 
             else:
                 e = discord.Embed(color=embedcolor)
             e.add_field(name="Ascii Generated!", value=asci, inline=False)
@@ -275,7 +279,6 @@ async def on_message(message):
             await message.channel.send(asci)
     if command == "deepfry":
         if message.attachments:
-            
             url = message.attachements[0].url
         if message.mentions:
             url = message.mentions[0].avatar_url
@@ -311,5 +314,27 @@ async def on_message(message):
         else:
             await message.channel.send(f"{b} is down!")
 
-
+    if command == "clyde":
+        cly = f"https://nekobot.xyz/api/imagegen?type=clyde&text={'+'.join(args)}"
+        r = requests.get(cly, allow_redirects=True)
+        r = r.content.decode('utf8')
+        r = json.loads(r)
+        d = r["message"]
+        print(d)
+        r = requests.get(d, allow_redirects=True)
+        fname = f"{random.randint(1,500)}-clyde.png"
+        open(fname, "wb").write(r.content)
+        filee = discord.File(f"./{fname}", filename=fname)
+        if randomizecolor:
+            embed = discord.Embed(color=discord.Color.random())
+        else:
+            embed = discord.Embed(color=embedcolor)
+        embed.set_image(url=f"attachment://{fname}")
+        await message.channel.send(file=filee, embed=embed)
+        return os.remove(fname)
+    if command == "shutdown":
+        await message.channel.send('Shutting down the bot..')
+        exit()
 bot.run(token, bot=False)
+
+
