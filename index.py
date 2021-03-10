@@ -7,18 +7,17 @@ print(" \\        /  / __ \\|  |_|  | \\  ___/|  | \\/\\___ \\   /        \\  __
 print("  \\__/\\  /  (____  /____/__|  \\___  >__|  /____  > /_______  /\\___  >____/__|   |___  /\\____/|__|  ")
 print("       \\/        \\/               \\/           \\/          \\/     \\/                \\/             ")
 
-
 #import bullshits
-from discord.ext import commands
-import json, time, discord, requests, random, os, asyncio, subprocess, platform
+from discord.ext import tasks, commands
+import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp
 
 #config reading  
 config = open('config.json', 'r')
 config = config.read()
-config = json.loads(config)
+config = json.loads(config) 
 
 prefix = config["prefix"]
-whitelist = config["whitelisted"]
+whitelist = config["whitelisted"]       
 token = config["token"]
 embedcolor = config["embedcolor"]
 
@@ -56,12 +55,15 @@ else:
     randomizecolor = False 
     embedcolor = getcolor(embedcolor)
 
-bot = commands.Bot(command_prefix=";")
+bot = commands.Bot(command_prefix=prefix)
 @bot.event
 async def on_ready():
     whitelist.append(str(bot.user.id))
     print(whitelist)
     print('ready')
+    global start_time
+    start_time = time.time()
+    
 
 
 
@@ -259,7 +261,10 @@ async def on_message(message):
         embed.add_field(name="website", value="Pings to website to see if its down/up", inline=True)
         embed.add_field(name="clyde", value="Beep Boop. ", inline=True)
         embed.add_field(name="deepfry", value=":100::100::100::100::100::rofl::rofl::rofl::rofl: :ok_hand::ok_hand::ok_hand::ok_hand:", inline=True) 
-        
+        embed.add_field(name="coinflip", value="Heads or tails, i dont care!", inline=True)
+        embed.add_field(name="bobux", value="bobux man is here 😳", inline=True)
+        embed.add_field(name="loopnick", value="Changes your nickname every single 0.5 sec", inline=True)
+        embed.add_field(name="disableloopnick", value="disables it. simple.", inline=True)
         await message.channel.send(embed=embed)            
     if command == "ascii":
         await message.delete()
@@ -279,7 +284,7 @@ async def on_message(message):
             await message.channel.send(asci)
     if command == "deepfry":
         if message.attachments:
-            url = message.attachements[0].url
+            url = message.attachments[0].url
         if message.mentions:
             url = message.mentions[0].avatar_url
         else:
@@ -335,6 +340,86 @@ async def on_message(message):
     if command == "shutdown":
         await message.channel.send('Shutting down the bot..')
         exit()
-bot.run(token, bot=False)
+        
+    if command == "coinflip":
+        if randomizecolor:
+            e = discord.Embed(color=discord.Color.random(), title="Flipping coin..")
+        else:
+            e = discord.Embed(color=embedcolor, title="Flipping coin..")
+        e = await message.channel.send(embed=e)
+        rand = random.randint(1,2)
+        await asyncio.sleep(0.5)
+        if rand == 1:
+            if randomizecolor:
+                ee = discord.Embed(color=discord.Color.random(), description="You got tails!")
+            else:
+                ee = discord.Embed(color=embedcolor, description="You got tails!")
+            await e.edit(embed=ee)
+        else:
+            if randomizecolor:
+                ee = discord.Embed(color=discord.Color.random(), description="You got heads!")
+            else:
+                ee = discord.Embed(color=embedcolor, description="You got heads!")
+            await e.edit(embed=ee)
+    if command == "uptime":
+        current_time = time.time()
+        difference = int(round(current_time - start_time))
+        text = str(datetime.timedelta(seconds=difference))
+        await message.channel.send(text)
+    if command == "bobux":
+        ee = await message.channel.send('Bobux Generator Is Loading... https://tenor.com/bpeeP.gif')
+        await asyncio.sleep(1)
+        e = random.randint(1,5)
+        switchor = {
+            1: "https://cdn.discordapp.com/attachments/808271799153983508/819070121858564116/0bobux.mp4",
+            2: "https://cdn.discordapp.com/attachments/808271799153983508/819070307431874560/0bobuxsad.mp4",
+            3: "https://cdn.discordapp.com/attachments/804031549477355524/818843084058132500/BOBUX.mp4",
+            4: "https://cdn.discordapp.com/attachments/808271799153983508/819071843603972096/1mBOBUXPOG.mp4",
+            5: "https://cdn.discordapp.com/attachments/808271799153983508/819071277955284992/rickinfinitbobux.mp4"
+        }
+        await ee.edit(content=switchor.get(e))
+    if command == "webhook":
+        async def send(url, msg):
+            async with aiohttp.ClientSession() as session:
+                try:
+                    webhook = discord.Webhook.from_url(url, adapter=discord.AsyncWebhookAdapter(session))
+                    await webhook.send(msg, username="Walter's Selfbot")
+                    await message.channel.send("✅ Sended")
+                except:
+                    await message.channel.send('❎ Not a valid webhook URL \n `Usage: <webhookurl>, <message>`')
+        
+        e = " ".join(args).split(',', 2)
+        if len(e) == 2:
+            await send(e[0], e[1])
+        else:
+            await message.channel.send('❎ `Usage: <webhookurl>, <message>`')
+
+    if command == "loopnick":
+        def spt(word):
+            return [char for char in word] 
+        e = spt(" ".join(args))
+        if message.author.id != bot.user.id:
+            return
+        global ln
+
+        @tasks.loop(seconds=0.2)
+        async def ln(e):
+            lol = []
+            for i in e:
+                print(lol)
+                if len(lol) > len(e):
+                    lol = []
+                lol.append(i)
+                await message.author.edit(nick="".join(lol))
+        await ln.start(e)
+    if command == "disableloopnick":
+        ln.cancel()
+        if message.author.id != bot.user.id:
+            return
+        await message.author.edit(nick="")
+
+
+
+bot.run(token, bot=False) 
 
 
