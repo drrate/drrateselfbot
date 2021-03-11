@@ -10,7 +10,7 @@ yes = "✅"
 no = "❎"
 
 
-version = '1.2'
+version = '1.3'
 
 
 #config reading  
@@ -360,34 +360,10 @@ async def on_message(message):
             embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/H5JpYcNBn2")
         else:
             embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
-        embed.add_field(name="ping", value="Measure your ping! ", inline=False)
-        embed.add_field(name="trump", value="Trump said pog :flushed:", inline=True)
-        embed.add_field(name="purge", value="Purge your messages!", inline=True)
-        embed.add_field(name="recaptcha", value="Ahh, that annoying captcha..", inline=False)
-        embed.add_field(name="avatar", value="The title said it all.", inline=True)
-        embed.add_field(name="spam", value="Usage : <limit> <message>, ps: will spam on the channel you send in.", inline=True)
-        embed.add_field(name="imageembed", value="The title said it all. use links.", inline=True)
-        embed.add_field(name="embed", value="Usage : <Title> <desc>.", inline=True)
-        embed.add_field(name="ghostping", value="Usage : <limit> <message> / <limit> --id <userid>", inline=True)
-        embed.add_field(name="ascii", value="Generates graffiti ascii art.", inline=True)
-        embed.add_field(name="shutdown", value="Title said it all, Shutdowns the bot.", inline=False)
-        embed.add_field(name="website", value="Pings to website to see if its down/up", inline=True)
-        embed.add_field(name="clyde", value="Beep Boop. ", inline=True)
-        embed.add_field(name="deepfry", value=":100::100::100::100::100::rofl::rofl::rofl::rofl: :ok_hand::ok_hand::ok_hand::ok_hand:", inline=True) 
-        embed.add_field(name="coinflip", value="Heads or tails, i dont care!", inline=True)
-        embed.add_field(name="bobux", value="bobux man is here 😳", inline=True)
-        embed.add_field(name="loopnick", value="Changes your nickname every single 0.5 sec", inline=True)
-        embed.add_field(name="disableloopnick", value="disables it. simple.", inline=True)
-        embed.add_field(name="nitro", value='"generates" a nitro link. mostly isnt valid.', inline=True)
-        embed.add_field(name="uptime", value='Title said it all. (again)', inline=True)
-        embed.add_field(name="webhook", value='Sends a message to webhook, requires link and message content, split with ","', inline=True)
-        embed.add_field(name="gayrate", value=r'100% def real', inline=True)
-        embed.add_field(name="hack", value=r'100% real haxxor :sunglaso:', inline=True)
-        embed.add_field(name="version", value=r'see wot version ur in', inline=True)
-        embed.add_field(name="playing", value=r'set ur playing status, not client-sided, you wont see but peoples will', inline=True)
-        embed.add_field(name="watching", value=r'set ur watching status, not client-sided, you wont see but peoples will', inline=True)
-        embed.add_field(name="version", value=r'see wot version ur in', inline=True)
-        embed.add_field(name="statusclear", value=r'clear costume status.', inline=True)
+        embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,statusclear,ghostping ", inline=False)
+        embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux", inline=True)
+        embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,gayrate", inline=True)
+        embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
         
         
         await message.channel.send(embed=embed)            
