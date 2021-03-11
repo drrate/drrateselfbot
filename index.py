@@ -541,7 +541,7 @@ async def on_message(message):
     if command == "version":
         r = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver')
         await message.channel.send(f"""Version: {version}
-        Newest version : {r.content.decode('utf8')}""")
+Newest version : {r.content.decode('utf8')}""")
 
 bot.run(token, bot=False) 
 
