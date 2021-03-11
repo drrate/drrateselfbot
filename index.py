@@ -71,7 +71,8 @@ burn = ["""
 
 
 
-
+copycat = False
+copycatid = False
 
 
 config = open('config.json', 'r')
@@ -157,6 +158,7 @@ async def on_message(message):
     author = message.author
     if str(author.id) not in whitelist:
         return
+    
     content = message.content
     args = content.split(" ")
     command = args[0].lower().replace(prefix, "")
@@ -357,7 +359,7 @@ async def on_message(message):
         except:
             print('ok no delete perms smh')
         if randomizecolor:
-            embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/H5JpYcNBn2")
+            embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
         else:
             embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
         embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,statusclear,ghostping ", inline=False)
@@ -632,7 +634,7 @@ Newest version : {r.content.decode('utf8')}""")
                 await message.channel.send(embed=embedsuccess('Successfully changed status!'))
             except:
                 await message.channel.send(embed=embederror('Failed!'))
-    if command == "statusclear":
+    if command == "statusclear" or command == "clearstatus":
         try:
             await bot.change_presence(activity=discord.Game(name=""))
             await message.channel.send(embed=embedsuccess('Successfully cleared status!'))
@@ -660,7 +662,14 @@ Newest version : {r.content.decode('utf8')}""")
         user = user.name 
         e.add_field(name=f"{user}'s gayrate", value=f"🏳️‍🌈 {p}%", inline=False) 
         await message.channel.send(embed=e)
-
+    if command == "copycat":
+        copycat = True
+        if message.mentions:
+            copycatid = message.mentions[0].id
+            use = message.mentions[0].name
+        else:
+            await message.channel.send(embed=embederror(f"Mention someone to copycat."))
+        await message.channel.send(embed=embedsuccess(f'Copycatting {use}'))
 
 
 
@@ -693,8 +702,12 @@ Newest version : {r.content.decode('utf8')}""")
         await asyncio.sleep(2)
         await msg.edit(content=f'Successfully hacked {hac}')
     if command == "support":
-        await message.channel.send("https://discord.gg/H5JpYcNBn2")
-    
+        invcode = "kuSzstZyFf"
+        r = requests.post(f"https://discord.com/api/v8/invites/{invcode}",headers={'authorization':token})
+        if r.Response == 200:
+            await message.channel.send(embed=embederror(f"{yes} Joined Support Server!"))
+        else:
+            await message.channel.send(embed=embederror("failed successfully."))
 
 bot.run(token, bot=False) 
 
