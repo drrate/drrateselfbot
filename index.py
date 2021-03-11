@@ -10,7 +10,7 @@ yes = "✅"
 no = "❎"
 
 
-version = '1.1'
+version = '1.2'
 
 
 #config reading  
@@ -166,7 +166,10 @@ async def on_message(message):
     else:
         return
     if command == "ping":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         print('e')
         before = time.monotonic()
         if randomizecolor:
@@ -183,7 +186,10 @@ async def on_message(message):
         await message.edit(embed=embeddd)
         print(f'Ping {int(ping)}ms')
     if command == "trump":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         if len(args):
             trumpo = f"https://api.no-api-key.com/api/v2/trump?message={'%20'.join(args)}"
             r = requests.get(trumpo, allow_redirects=True)
@@ -205,7 +211,10 @@ async def on_message(message):
             except:
                 e = embederror('Thats not an int!')
                 await message.channel.send(embed=e)
-            await message.delete()
+            try:
+                await message.delete()
+            except:
+                print('ok no delete perms smh')
             mymessages = []
             async for m in message.channel.history():
                 if len(mymessages) == limit:
@@ -219,7 +228,10 @@ async def on_message(message):
         else:
             await message.channel.send(embed=embederror("Are you just gonna delete all of things and get ratelimited?"))
     if command == "recaptcha" or command == "captcha":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         if len(args):
             
             trump = f"https://api.no-api-key.com/api/v2/recaptcha?text={'%20'.join(args)}"
@@ -270,7 +282,10 @@ async def on_message(message):
             await message.channel.send(embed=embedd) 
             requests.get(url)
     if command == "spam":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         limit = int(args[0])
         args.pop(0)
         msg = " ".join(args)
@@ -288,7 +303,10 @@ async def on_message(message):
         else:
             await message.channel.send(embed=embederror('Please provide link.'), delete_after=3)
             return
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         
         if randomizecolor:
             embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
@@ -299,7 +317,10 @@ async def on_message(message):
         
         
     if command == "embed":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         t = " ".join(args).split(",")
         if len(t) == 1:
             if randomizecolor:
@@ -316,7 +337,10 @@ async def on_message(message):
             
             await message.channel.send(embed=e)
     if command == 'ghostping':
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         limit = int(args[0])
         args.pop(0)
         if "--id" in content:
@@ -328,9 +352,12 @@ async def on_message(message):
             await message.channel.send(msg, delete_after=0.3)
             await asyncio.sleep(0.4)
     if command == "help":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         if randomizecolor:
-            embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
+            embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/H5JpYcNBn2")
         else:
             embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
         embed.add_field(name="ping", value="Measure your ping! ", inline=False)
@@ -354,9 +381,21 @@ async def on_message(message):
         embed.add_field(name="nitro", value='"generates" a nitro link. mostly isnt valid.', inline=True)
         embed.add_field(name="uptime", value='Title said it all. (again)', inline=True)
         embed.add_field(name="webhook", value='Sends a message to webhook, requires link and message content, split with ","', inline=True)
+        embed.add_field(name="gayrate", value=r'100% def real', inline=True)
+        embed.add_field(name="hack", value=r'100% real haxxor :sunglaso:', inline=True)
+        embed.add_field(name="version", value=r'see wot version ur in', inline=True)
+        embed.add_field(name="playing", value=r'set ur playing status, not client-sided, you wont see but peoples will', inline=True)
+        embed.add_field(name="watching", value=r'set ur watching status, not client-sided, you wont see but peoples will', inline=True)
+        embed.add_field(name="version", value=r'see wot version ur in', inline=True)
+        embed.add_field(name="statusclear", value=r'clear costume status.', inline=True)
+        
+        
         await message.channel.send(embed=embed)            
     if command == "ascii":
-        await message.delete()
+        try:
+            await message.delete()
+        except:
+            print('ok no delete perms smh')
         
         a = "+".join(args)
         b = f"https://artii.herokuapp.com/make?text={a}&font=graffiti"
@@ -393,7 +432,10 @@ async def on_message(message):
                 e = discord.Embed(color=embedcolor)
             e.set_image(url=final)
             await message.channel.send(embed=e)
-            await message.delete()
+            try:
+                await message.delete()
+            except:
+                print('ok no delete perms smh')
         else:
             await message.channel.send('Oops! something is wrong.', delete_after=2)
             return
@@ -561,7 +603,10 @@ async def on_message(message):
             except:
                 await message.channel.send(embed=embederror("Thats not an int!"))
                 return
-            await message.delete()
+            try:
+                await message.delete()
+            except:
+                print('ok no delete perms smh')
         else:
             await message.channel.send(embed=embederror("Are you just gonna delete all of things and get ratelimited?"))
         e = []
@@ -597,6 +642,83 @@ Newest version : {r.content.decode('utf8')}""")
         for i in burn:
             await a.edit(content=i)
             await asyncio.sleep(1)
+    if command == "watching" or command == "watch":
+        if args:
+            try:
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=" ".join(args)))
+                await message.channel.send(embed=embedsuccess('Successfully changed status!'))
+            except:
+                await message.channel.send(embed=embederror('Failed!'))
+    if command == "playing" or command == "play":
+        if args: 
+            try: 
+                await bot.change_presence(activity=discord.Game(name=" ".join(args)))
+                await message.channel.send(embed=embedsuccess('Successfully changed status!'))
+            except:
+                await message.channel.send(embed=embederror('Failed!'))
+    if command == "statusclear":
+        try:
+            await bot.change_presence(activity=discord.Game(name=""))
+            await message.channel.send(embed=embedsuccess('Successfully cleared status!'))
+        except:
+            await message.channel.send(embed=embederror('Failed!'))
+    if command == "gaycheck" or command == "gayrate": 
+        p = random.randint(1, 100) 
+        if randomizecolor: 
+            e = discord.Embed(color=discord.Color.random())
+        else:
+            e = discord.Embed(color=embedcolor)
+        if message.mentions:
+            user = message.mentions[0]
+        else: 
+            try:
+                if args:
+                    user = bot.get_user(args[0])
+                else:
+                    user= message.author
+            except:
+                user = message.author
+        if user.id == 610737823888310272 or user.id == 525563384968511489:
+            p = 0 
+
+        user = user.name 
+        e.add_field(name=f"{user}'s gayrate", value=f"🏳️‍🌈 {p}%", inline=False) 
+        await message.channel.send(embed=e)
+
+
+
+
+
+# nothing to see here :) "​‌​​​​‌​​‌​‌​‌​‌​​‌‌​​​​​‌‌‌​​‌​​​‌‌​​​‌​‌​‌​‌​​​‌‌‌​‌‌​​‌‌‌​​​​"
+
+
+
+
+
+
+
+
+    if command == "hack":
+        if args:
+            hac = " ".join(args)
+        else:
+            return await message.channel.send(embed=embederror('Are you trying to hack yourself?'))
+        msg = await message.channel.send(f'Hacking {hac}.')
+        e = []
+        for i in range(2):
+            e.append('.')
+            await msg.edit(content=f'Hacking {hac}.{"".join(e)}')
+            await asyncio.sleep(0.1)
+        await msg.edit(content='Bypassing windows antihack...')
+        await asyncio.sleep(2)
+        await msg.edit(content='Getting user-token..')
+        await asyncio.sleep(2)
+        await msg.edit(content='Reporting to FBI...')
+        await asyncio.sleep(2)
+        await msg.edit(content=f'Successfully hacked {hac}')
+    if command == "support":
+        await message.channel.send("https://discord.gg/H5JpYcNBn2")
+    
 
 bot.run(token, bot=False) 
 
