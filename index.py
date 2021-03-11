@@ -594,9 +594,9 @@ Newest version : {r.content.decode('utf8')}""")
     if command == "gayburn":
         a = None
         a = await message.channel.send("Burning gay flag..")
-    for i in burn:
-        await a.edit(content=i)
-        await asyncio.sleep(1)
+        for i in burn:
+            await a.edit(content=i)
+            await asyncio.sleep(1)
 
 bot.run(token, bot=False) 
 
