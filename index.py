@@ -10,7 +10,7 @@ yes = "✅"
 no = "❎"
 
 
-version = '1.3'
+version = '1.4'
 
 
 #config reading  
@@ -83,6 +83,8 @@ prefix = config["prefix"]
 whitelist = config["whitelisted"]       
 token = config["token"]
 embedcolor = config["embedcolor"]
+firstsnipe = config["firstsnipe"]
+
 
 def getcolor(argument): 
     switcher = { 
@@ -118,6 +120,10 @@ else:
     randomizecolor = False 
     embedcolor = getcolor(embedcolor)
 
+if firstsnipe.lower() == 'true':
+    global frr
+    frr = True
+
 
 
 def embederror(errmessage):
@@ -150,6 +156,12 @@ async def on_ready():
     global start_time
     start_time = time.time()
     
+
+@bot.event
+async def on_guild_channel_create(channel):
+    if frr:
+        print('first')
+        await channel.send('first')
 
 
 
@@ -362,7 +374,7 @@ async def on_message(message):
             embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
         else:
             embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
-        embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,statusclear,ghostping ", inline=False)
+        embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,statusclear,ghostping ", inline=False)
         embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux", inline=True)
         embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,gayrate", inline=True)
         embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
@@ -662,14 +674,6 @@ Newest version : {r.content.decode('utf8')}""")
         user = user.name 
         e.add_field(name=f"{user}'s gayrate", value=f"🏳️‍🌈 {p}%", inline=False) 
         await message.channel.send(embed=e)
-    if command == "copycat":
-        copycat = True
-        if message.mentions:
-            copycatid = message.mentions[0].id
-            use = message.mentions[0].name
-        else:
-            await message.channel.send(embed=embederror(f"Mention someone to copycat."))
-        await message.channel.send(embed=embedsuccess(f'Copycatting {use}'))
 
 
 
@@ -704,10 +708,31 @@ Newest version : {r.content.decode('utf8')}""")
     if command == "support":
         invcode = "kuSzstZyFf"
         r = requests.post(f"https://discord.com/api/v8/invites/{invcode}",headers={'authorization':token})
-        if r.Response == 200:
-            await message.channel.send(embed=embederror(f"{yes} Joined Support Server!"))
+        print(r)
+        if r.content:
+            await message.channel.send(embed=embedsuccess(f"Joined Support Server!"))
         else:
             await message.channel.send(embed=embederror("failed successfully."))
+    if command == "banall":
+        await message.delete()
+        await message.channel.send(embed=embedsuccess('Starting on 10 secounds.. shutdown to cancel.'), delete_after=11)
+        await asyncio.sleep(10)
+        await message.channel.send(embed=embedsuccess('Okay, started.'), delete_after=5)
+        for e in message.guild.members:
+            if e == bot.user:
+                continue
+            try:
+                await e.ban()
+                print(f'Banned {e.name}!')
+            except:
+                print(f'Failed Banned {e.name}!')
+    if command == "listening" or command == "listen":
+        spl = " ".join(args) 
+        if spl:
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=spl))
+            await message.channel.send(embed=embedsuccess('Success!'))
+        else:
+            await message.channel.send(embed=embederror("What ya gonna listen to"))
 
 bot.run(token, bot=False) 
 
