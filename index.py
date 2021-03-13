@@ -731,7 +731,75 @@ async def avatar(ctx, user: discord.Member = None):
         embedd.set_author(name=f"{user.name}'s Avatar")
         embedd.set_image(url=url)
         await ctx.send(embed=embedd)
+@bot.command(case_insensitive=True, aliases=['getrandomnum', 'randomnumber', 'random'])
+async def getrandom(ctx, *args):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('no delete perms smh')
+    if args:
+        args = " ".join(args)
+        args = args.split('|')
+        if len(args) == 1:
+            return await ctx.send(embed=embederror('Usage: `min | max`')) 
+
+        if len(args) == 2:
+            try:
+                minim = int(args[0])
+                maxim = int(args[1])
+            except:
+                return await ctx.send('Thats not even a number smh')
+            a = await ctx.send('Prepare for randomness')
+            await asyncio.sleep(1)
+            for i in range(10):
+                await a.edit(content=str(random.randint(minim, maxim)))
+                await asyncio.sleep(1)
+        else:
+            minim = 1
+            maxim = random.randint(500, 1500)
+            a = await ctx.send('Prepare for randomness')
+            await asyncio.sleep(1)
+            for i in range(10):
+                await a.edit(content=str(random.randint(minim, maxim)))
+                await asyncio.sleep(1)
+    else:
+        minim = 1
+        maxim = random.randint(500, 1500)
+        a = await ctx.send('Prepare for randomness')
+        await asyncio.sleep(1)
+        for i in range(10):
+            await a.edit(content=str(random.randint(minim, maxim)))
+            await asyncio.sleep(1)
+@bot.command(aliases=['tableflip'])
+async def fliptable(ctx):
+    await ctx.message.delete()
+    a = await ctx.send('┬─┬ ノ( ゜-゜ノ)')
+    await asyncio.sleep(0.5)
+    await a.edit(content='(╯°□°）╯︵ ┻━┻')
+@bot.command(aliases=['dmspam'])
+async def spamdm(ctx, member: discord.Member = None, *args):
+    if args:
+        args = list(args)
+        if member:
+            try:
+                limit = int(args[0])
+                args.pop(0)
+            except:
+                return await ctx.send(embed=embederror('Isnt even number. Usage : `member limit(int) message`'))
+
+            msg = " ".join(args)
+            if msg:
+                await ctx.send(embed=embedsuccess(f"Spamming {member}'s dms!"))
+                for i in range(limit):
+                    member.send(msg)
+                    await asyncio.sleep(1)
+            else:
+                return await ctx.send('What the fuck was should be the message? specify it. ')
 
 
 
-bot.run("ODE5NzUyNDc4NDY2NjM3ODQ1.YErMEg.2H_wfT1Lx9cogiM8XYRB1IUE1Yw", bot=False)
+
+
+
+bot.run(token, bot=False)
