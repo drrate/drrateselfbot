@@ -731,27 +731,7 @@ async def avatar(ctx, user: discord.Member = None):
         embedd.set_author(name=f"{user.name}'s Avatar")
         embedd.set_image(url=url)
         await ctx.send(embed=embedd)
-@bot.command(case_insensitive=True)
-async def update(ctx):
-    checkw(ctx.author.id)
-    process = []
-    process.append('Update Request')
-    a = await ctx.send('Updating bot..')
-    process.append('Checking newest update...')
-    new = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver').content.decode("utf8")
-    if new == version:
-        process.append('Already updated..')
-        await a.edit(content="Already on the newest version")
-        return
-    else:
-        process.append('Getting newest version..')
-        await a.edit(content=f"`{versione}` => `{new}`")
-        file = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/index.py').content.decode("utf8")
-        open('index.py', "w").write(file)
-        process.append('Done!')
-        await a.edit('Done! Shutting down...')
-        exit()
-        
+
 
 
 bot.run("ODE5NzUyNDc4NDY2NjM3ODQ1.YErMEg.2H_wfT1Lx9cogiM8XYRB1IUE1Yw", bot=False)
