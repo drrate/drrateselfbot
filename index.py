@@ -733,7 +733,7 @@ async def update(ctx):
         return
     else:
         process.append('Getting newest version..')
-        await a.edit(content=f"`{version}` => `{new}`")
+        await a.edit(content=f"`{versione}` => `{new}`")
         file = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/index.py').content.decode("utf8")
         open('index.py', "w").write(file)
         process.append('Done!')
