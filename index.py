@@ -97,6 +97,18 @@ def checkw(ide):
     if ide not in whitelist:
         return
 
+@bot.event
+async def on_guild_channel_create(channel):
+
+    if frr:
+        if "ticket" in channel.name: return
+        try:
+            await channel.send('first')
+            print(f'first on {channel.name} in {channel.guild}')
+        except:
+            print(f'No access on {channel.guild} - {channel.name}')
+        
+
 @bot.command()
 async def help(ctx):
     checkw(ctx.author.id)
