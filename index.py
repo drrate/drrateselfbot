@@ -4,7 +4,7 @@ yes = "✅"
 no = "❎"
 
 
-versione = '2.1'
+versione = '2.2'
 
 
 #config reading  
@@ -40,6 +40,17 @@ def getcolor(argument):
 config = open('config.json', 'r')
 config = config.read()
 config = json.loads(config) 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 prefix = config["prefix"]
 whitelist = config["whitelisted"]       
@@ -79,14 +90,17 @@ bot.remove_command('help')
 @bot.event
 async def on_ready():
     whitelist.append(str(bot.user.id))
+    print(bcolors.OKGREEN)
     print(" __      __        .__   __              /\\          _________      .__   ________.           __   ")
     print("/  \\    /  \\_____  |  |_/  |_  __________)/ ______  /   _____/ ____ |  |_/ ____\\_ |__   _____/  |_ ")
     print("\\   \\/\\/   /\\__  \\ |  |\\   __\\/ __ \\_  __ \\/  ___/  \\_____  \\_/ __ \\|  |\\   __\\ | __ \\ /  _ \\   __\\")
     print(" \\        /  / __ \\|  |_|  | \\  ___/|  | \\/\\___ \\   /        \\  ___/|  |_|  |   | \\_\\ (  <_> )  |  ")
     print("  \\__/\\  /  (____  /____/__|  \\___  >__|  /____  > /_______  /\\___  >____/__|   |___  /\\____/|__|  ")
     print("       \\/        \\/               \\/           \\/          \\/     \\/                \\/             ")
+    print(bcolors.ENDC)
     r = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver').content.decode("utf8")
-    print(f'Logged in as {bot.user.name}#{bot.user.discriminator}, Version: {versione}, Newest : {r}')
+
+    print(f'{bcolors.OKBLUE}Logged in as {bot.user.name}#{bot.user.discriminator}{bcolors.ENDC}, {bcolors.OKGREEN}Version: {versione}, Newest : {r}{bcolors.ENDC}')
     print(whitelist)
     global start_time
     start_time = time.time()
@@ -115,7 +129,8 @@ async def help(ctx):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
+
     if randomizecolor:
         embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
     else:
@@ -145,7 +160,7 @@ async def ghostping(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     limit = int(args[0])
     args.pop(0)
     msg = " ".join(args)
@@ -159,7 +174,7 @@ async def proxy(ctx):
     try:
         await ctx.message.delete()
     except:
-        print('no delete perms')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     if os.path.exists('proxy.txt') == False:
         file = open("proxy.txt", "a+")
         res = requests.get('https://api.proxyscrape.com/?request=displayproxies&proxytype=http&timeout=1500')
@@ -315,7 +330,7 @@ async def purgeall(ctx, *args):
         try:
             await ctx.message.delete()
         except:
-            print('ok no delete perms smh')
+            print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     else:
         await ctx.send(embed=embederror("Are you just gonna delete all of things and get ratelimited? give me limit."))
     e = []
@@ -408,7 +423,7 @@ async def webhook(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     args = list(args)
     async def send(url, msg):
         async with aiohttp.ClientSession() as session:
@@ -429,7 +444,7 @@ async def robux(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     checkw(ctx.author.id)
     ee = await ctx.send('Bobux Generator Is Loading... https://tenor.com/bpeeP.gif')
     await asyncio.sleep(1)
@@ -481,7 +496,7 @@ async def clyde(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     checkw(ctx.author.id)
     cly = f"https://nekobot.xyz/api/imagegen?type=clyde&text={'+'.join(args)}"
     r = requests.get(cly, allow_redirects=True)
@@ -504,7 +519,7 @@ async def website(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     checkw(ctx.author.id)
     b = " ".join(args).replace('https://', "").replace('http://', "")
     param = '-n' if platform.system().lower()=='windows' else '-c'
@@ -540,7 +555,7 @@ async def deepfry(ctx, user:discord.Member=None,*args):
         try:
             await ctx.message.delete()
         except:
-            print('ok no delete perms smh')
+            print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     else:
         await ctx.send('Oops! something is wrong.', delete_after=2)
         return
@@ -552,7 +567,7 @@ async def ascii(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     a = "+".join(args)
     b = f"https://artii.herokuapp.com/make?text={a}&font=graffiti"
     r = requests.get(b, allow_redirects=True)
@@ -572,7 +587,7 @@ async def embed(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     t = " ".join(args).split(",")
     if len(t) == 1:
         if randomizecolor:
@@ -604,7 +619,7 @@ async def imageembed(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     
     if randomizecolor:
         embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
@@ -619,7 +634,7 @@ async def spam(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     limit = int(args[0])
     args.pop(0)
     msg = " ".join(args)
@@ -632,7 +647,7 @@ async def recaptcha(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     if len(args):
         
         trump = f"https://api.no-api-key.com/api/v2/recaptcha?text={'%20'.join(args)}"
@@ -673,7 +688,7 @@ async def purge(ctx, *args):
         try:
             await ctx.message.delete()
         except:
-            print('ok no delete perms smh')
+            print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
         mymessages = []
         async for m in ctx.channel.history():
             if len(mymessages) == limit:
@@ -690,7 +705,7 @@ async def trump(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     if len(args):
         trumpo = f"https://api.no-api-key.com/api/v2/trump?message={'%20'.join(args)}"
         r = requests.get(trumpo, allow_redirects=True)
@@ -712,7 +727,7 @@ async def ping(ctx, *args):
     try:
         await ctx.message.delete()
     except:
-        print('ok no delete perms smh')
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     print('e')
     before = time.monotonic()
     if randomizecolor:
