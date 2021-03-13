@@ -819,6 +819,7 @@ async def stream(ctx,*args):
         await ctx.send(embed='What should ya stream?')
 @bot.command(aliases=['dogecoinbalance', 'dogecoinbal'])
 async def dogebal(ctx,*args):
+    checkw(ctx.author.id)
     args = list(args)
     print(args)
     if args:
@@ -835,6 +836,7 @@ async def dogebal(ctx,*args):
         await ctx.send(embed=embederror('What was the dogecoin address?'), delete_after=3)
 @bot.command(aliases=['dogecoindifficulty', 'dogedifficulty'])
 async def dogediff(ctx):
+    checkw(ctx.author.id)
     link = f"http://dogechain.info/chain/Dogecoin/q/getdifficulty"
 
     r = requests.get(link, allow_redirects=True)
@@ -846,6 +848,7 @@ async def dogediff(ctx):
     await ctx.send(embed=e)
 @bot.command(aliases=['dogecointotal', 'dogestotal'])
 async def dogetotal(ctx):
+    checkw(ctx.author.id)
     link = f"https://dogechain.info/chain/Dogecoin/q/totalbc"
 
     r = requests.get(link, allow_redirects=True)
