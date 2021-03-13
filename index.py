@@ -1,90 +1,13 @@
-
-
-
-#import bullshits
 from discord.ext import tasks, commands
 import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string
-
-
 yes = "✅"
 no = "❎"
 
 
-version = '1.4'
+versione = '2 REWRITE'
 
 
 #config reading  
-
-burn = ["""
-🟥🟥🟥🟥🟥🟥
-🟧🟧🟧🟧🟧🟧
-🟨🟨🟨🟨🟨🟨
-🟩🟩🟩🟩🟩🟩
-🟦🟦🟦🟦🟦🟦
-🟪🟪🟪🟪🟪🟪
-""","""
-🟥🟥🟥🟥🟥🔥
-🟧🟧🟧🟧🟧🔥
-🟨🟨🟨🟨🟨🔥
-🟩🟩🟩🟩🟩🔥
-🟦🟦🟦🟦🟦🔥
-🟪🟪🟪🟪🟪🔥
-""","""
-🟥🟥🟥🟥🔥🔥
-🟧🟧🟧🟧🔥🔥
-🟨🟨🟨🟨🔥🔥
-🟩🟩🟩🟩🔥🔥
-🟦🟦🟦🟦🔥🔥
-🟪🟪🟪🟪🔥🔥
-""","""
-🟥🟥🟥🔥🔥🔥
-🟧🟧🟧🔥🔥🔥
-🟨🟨🟨🔥🔥🔥
-🟩🟩🟩🔥🔥🔥
-🟦🟦🟦🔥🔥🔥
-🟪🟪🟪🔥🔥🔥
-""","""
-🟥🟥🔥🔥🔥🔥
-🟧🟧🔥🔥🔥🔥
-🟨🟨🔥🔥🔥🔥
-🟩🟩🔥🔥🔥🔥
-🟦🟦🔥🔥🔥🔥
-🟪🟪🔥🔥🔥🔥
-""","""
-🟥🔥🔥🔥🔥🔥
-🟧🔥🔥🔥🔥🔥
-🟨🔥🔥🔥🔥🔥
-🟩🔥🔥🔥🔥🔥
-🟦🔥🔥🔥🔥🔥
-🟪🔥🔥🔥🔥🔥
-""","""
-🔥🔥🔥🔥🔥🔥
-🔥🔥🔥🔥🔥🔥
-🔥🔥🔥🔥🔥🔥
-🔥🔥🔥🔥🔥🔥
-🔥🔥🔥🔥🔥🔥
-🔥🔥🔥🔥🔥🔥
-"""]
-
-
-
-
-
-
-copycat = False
-copycatid = False
-
-
-config = open('config.json', 'r')
-config = config.read()
-config = json.loads(config) 
-
-prefix = config["prefix"]
-whitelist = config["whitelisted"]       
-token = config["token"]
-embedcolor = config["embedcolor"]
-firstsnipe = config["firstsnipe"]
-
 
 def getcolor(argument): 
     switcher = { 
@@ -114,6 +37,16 @@ def getcolor(argument):
     }
     argument = argument.replace(' ', "_").lower()
     return switcher.get(argument, "") 
+config = open('config.json', 'r')
+config = config.read()
+config = json.loads(config) 
+
+prefix = config["prefix"]
+whitelist = config["whitelisted"]       
+token = config["token"]
+embedcolor = config["embedcolor"]
+firstsnipe = config["firstsnipe"]
+
 if config["randomcolor"] == "true": 
     randomizecolor = True
 else: 
@@ -141,7 +74,8 @@ def embedsuccess(ee):
     return e
 
 
-bot = commands.Bot(command_prefix=prefix)
+bot = commands.Bot(prefix, self_bot=True, case_insensitive=True)
+bot.remove_command('help')
 @bot.event
 async def on_ready():
     whitelist.append(str(bot.user.id))
@@ -152,588 +86,660 @@ async def on_ready():
     print("  \\__/\\  /  (____  /____/__|  \\___  >__|  /____  > /_______  /\\___  >____/__|   |___  /\\____/|__|  ")
     print("       \\/        \\/               \\/           \\/          \\/     \\/                \\/             ")
     r = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver').content.decode("utf8")
-    print(f'Logged in as {bot.user.name}#{bot.user.discriminator}, Version: {version}, Newest : {r}')
+    print(f'Logged in as {bot.user.name}#{bot.user.discriminator}, Version: {versione}, Newest : {r}')
+    print(whitelist)
     global start_time
     start_time = time.time()
-    
-
-@bot.event
-async def on_guild_channel_create(channel):
-    if frr:
-        print('first')
-        await channel.send('first')
 
 
-
-@bot.event
-async def on_message(message):
-    author = message.author
-    if str(author.id) not in whitelist:
+def checkw(ide):
+    ide = str(ide)
+    if ide not in whitelist:
         return
-    
-    content = message.content
-    args = content.split(" ")
-    command = args[0].lower().replace(prefix, "")
-    args.pop(0)
-    if content.startswith(prefix):
-        pass
+
+@bot.command()
+async def help(ctx):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    if randomizecolor:
+        embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
     else:
-        return
-    if command == "ping":
-        try:
-            await message.delete()
-        except:
-            print('ok no delete perms smh')
-        print('e')
-        before = time.monotonic()
-        if randomizecolor:
-            embedd = discord.Embed(title="Pinging..",color=discord.Color.random(), description="Walter's Selfbot")
-        else:
-            embedd = discord.Embed(title="Pinging..",color=embedcolor, description="Walter's Selfbot")
-        message = await message.channel.send(embed=embedd)
-        ping = (time.monotonic() - before) * 1000
-        if randomizecolor:
-            embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=discord.Color.random(), description="Walter's Selfbot")
-        else:
-            embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=embedcolor, description="Walter's Selfbot")
+        embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
+    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,statusclear,ghostping ", inline=False)
+    embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux", inline=True)
+    embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick", inline=True)
+    embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
         
-        await message.edit(embed=embeddd)
-        print(f'Ping {int(ping)}ms')
-    if command == "trump":
-        try:
-            await message.delete()
+        
+    await ctx.send(embed=embed)  
+
+@bot.command( aliases=['ghostspam'])
+async def ghostping(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    limit = int(args[0])
+    args.pop(0)
+    msg = " ".join(args)
+    for i in range(limit):
+        await ctx.send(msg, delete_after=0.3)
+        await asyncio.sleep(0.4)
+
+@bot.command()
+async def proxy(ctx):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('no delete perms')
+    if os.path.exists('proxy.txt') == False:
+        file = open("proxy.txt", "a+")
+        res = requests.get('https://api.proxyscrape.com/?request=displayproxies&proxytype=http&timeout=1500')
+        proxies = []
+        for proxy in res.text.split('\n'):
+            proxy = proxy.strip()
+            if proxy:
+                proxies.append(proxy)
+        for p in proxies:
+            file.write((p)+"\n")
+        file = open("proxy.txt", "a+")
+        res = requests.get('https://api.proxyscrape.com/?request=displayproxies&proxytype=https&timeout=1500')
+        proxies = []
+        for proxy in res.text.split('\n'):
+            proxy = proxy.strip()
+            if proxy:
+                proxies.append(proxy)
+        for p in proxies:
+            file.write((p)+"\n")
+    if os.path.exists('socks4proxy.txt') == False:
+        file = open("socks4proxy.txt", "a+")
+        res = requests.get('https://api.proxyscrape.com/?request=displayproxies&proxytype=socks4&timeout=1500')
+        proxies = []
+        for proxy in res.text.split('\n'):
+            proxy = proxy.strip()
+            if proxy:
+                proxies.append(proxy)
+        for p in proxies:
+            file.write((p)+"\n")
+    if os.path.exists('socks5proxy.txt') == False:
+        file = open("socks5proxy.txt", "a+")
+        res = requests.get('https://api.proxyscrape.com/?request=displayproxies&proxytype=socks5&timeout=1500')
+        proxies = []
+        for proxy in res.text.split('\n'):
+            proxy = proxy.strip()
+            if proxy:
+                proxies.append(proxy)
+        for p in proxies:
+            file.write((p)+"\n")
+    await ctx.send(file=discord.File('proxy.txt'))
+    await ctx.send(file=discord.File('socks5proxy.txt'))
+    await ctx.send(file=discord.File('socks4proxy.txt'))
+@bot.command( aliases=['listening'])
+async def listen(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args)
+    spl = " ".join(args) 
+    if spl:
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=spl))
+        await ctx.send(embed=embedsuccess('Success!'))
+    else:
+        await ctx.send(embed=embederror("What ya gonna listen to"))
+@bot.command( aliases=['play'])
+async def playing(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args)
+    if args: 
+        try: 
+            await bot.change_presence(activity=discord.Game(name=" ".join(args)))
+            await ctx.send(embed=embedsuccess('Successfully changed status!'))
         except:
-            print('ok no delete perms smh')
-        if len(args):
-            trumpo = f"https://api.no-api-key.com/api/v2/trump?message={'%20'.join(args)}"
-            r = requests.get(trumpo, allow_redirects=True)
-            filename = f"trump-${random.randint(1, 500)}.png"
-            open(filename, 'wb').write(r.content)
-            await message.channel.send(file=discord.File(filename))
-            os.remove(filename)
-        else:
-            trumpo = f"https://api.no-api-key.com/api/v2/trump?message=ok%20what%20should%20i%20say"
-            r = requests.get(trumpo, allow_redirects=True)
-            filename = f"noargs-trump-${random.randint(1, 500)}.png"
-            open(filename, 'wb').write(r.content)
-            await message.channel.send(file=discord.File(filename))
-            os.remove(filename)
-    if command == "purge":
-        if args:
-            try:
-                limit = int(args[0])
-            except:
-                e = embederror('Thats not an int!')
-                await message.channel.send(embed=e)
-            try:
-                await message.delete()
-            except:
-                print('ok no delete perms smh')
-            mymessages = []
-            async for m in message.channel.history():
-                if len(mymessages) == limit:
-                    break
-                if m.author == bot.user:
-                    mymessages.append('deleted some')
-                    try:
-                        await m.delete()
-                    except:
-                        print('error :flushed:')    
-        else:
-            await message.channel.send(embed=embederror("Are you just gonna delete all of things and get ratelimited?"))
-    if command == "recaptcha" or command == "captcha":
+            await ctx.send(embed=embederror('Failed!'))
+    else:
+        await ctx.send(embed=embederror("What ya gonna play tho"))
+
+@bot.command( aliases=['clearlistening', 'statusclear'])
+async def clearstatus(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args) 
+    try:
+        await bot.change_presence(activity=discord.Game(name=""))
+        await ctx.send(embed=embedsuccess('Successfully cleared status!'))
+    except:
+        await ctx.send(embed=embederror('Failed!'))
+
+@bot.command( aliases=['watching'])
+async def watch(ctx, *args):   
+    checkw(ctx.author.id)
+    args = list(args)  
+    if args:
         try:
-            await message.delete()
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=" ".join(args)))
+            await ctx.send(embed=embedsuccess('Successfully changed status!'))
         except:
-            print('ok no delete perms smh')
-        if len(args):
-            
-            trump = f"https://api.no-api-key.com/api/v2/recaptcha?text={'%20'.join(args)}"
-            r = requests.get(trump, allow_redirects=True)
-            filename = f"recaptcha-{random.randint(1, 500)}.png"
-            open(filename, 'wb').write(r.content)
-            filee = discord.File(f"./{filename}", filename=filename)
-            if randomizecolor:
-                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
-            else:
-                embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
-            embedd.set_image(url=f"attachment://{filename}")
-            await message.channel.send(file=filee, embed=embedd)
-            os.remove(filename)
-        else:
-            trumpo = f"https://api.no-api-key.com/api/v2/recaptcha?text=Im%20A%20Robot"
-            r = requests.get(trumpo, allow_redirects=True)
-            filename = f"noargs-recaptcha-${random.randint(1, 500)}.png"
-            open(filename, 'wb').write(r.content)
-            filee = discord.File(f"./{filename}", filename=filename)
-            if randomizecolor:
-                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
-            else:
-                embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
-            embedd.set_image(url=f"attachment://{filename}")
-            await message.channel.send(file=filee, embed=embedd)
-            os.remove(filename)
-    if command == "avatar":
-        if message.mentions:
-            for user in message.mentions:
-                url = user.avatar_url
-                if url:
-                    if randomizecolor:
-                        embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
-                    else:
-                        embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
-                    embedd.set_author(name=f"{message.mentions[0].name}'s Avatar")
-                    embedd.set_image(url=url)
-                    await message.channel.send(embed=embedd)
-        else:
-            url = bot.user.avatar_url
-            if randomizecolor:
-                embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
-            else:
-                embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
-            embedd.set_author(name=f"{bot.user.name}'s Avatar")
-            embedd.set_image(url=url)
-            await message.channel.send(embed=embedd) 
-            requests.get(url)
-    if command == "spam":
+            await ctx.send(embed=embederror('Failed!'))
+    else:
+        await ctx.send(embed=embederror("What ya gonna watch to"))
+
+@bot.command( aliases=['ver'])
+async def version(ctx, *args):    
+    checkw(ctx.author.id)
+    r = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver')
+    await ctx.send(f"""Version: {versione}
+Newest version : {r.content.decode('utf8')}""")
+
+@bot.command( aliases=['nitrogen'])
+async def nitro(ctx, *args):   
+    checkw(ctx.author.id)
+    args = list(args) 
+    if args:
         try:
-            await message.delete()
+            limit = int(args[0])
+            print('ok, generating')
         except:
-            print('ok no delete perms smh')
-        limit = int(args[0])
-        args.pop(0)
-        msg = " ".join(args)
-        for i in range(limit + 1):
-            await message.channel.send(msg)
-            await asyncio.sleep(0.4)
-    
-    if command == "imageembed":
-        if args:
-            if args[0].startswith('https://') or args[0].startswith('http://'):
-                url = args[0]
-            else:
-                await message.channel.send(embed=embederror('Please provide link.'), delete_after=3)
-                return
-        else:
-            await message.channel.send(embed=embederror('Please provide link.'), delete_after=3)
+            print('ok, generating')
+            limit = 5
+    else:
+        limit = 5
+    for i in range(limit):
+        code = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+        await ctx.send(f"discord.gift/{code}")
+        await asyncio.sleep(0.2)
+@bot.command( aliases=['supportserver', 'support', 'techsupport'])
+async def server(ctx, *args): 
+    checkw(ctx.author.id)
+    invcode = "kuSzstZyFf"
+    r = requests.post(f"https://discord.com/api/v8/invites/{invcode}",headers={'authorization':token})
+    print(r)
+    if r.content:
+        await ctx.send(embed=embedsuccess(f"Joined Support Server!"))
+    else:
+        await ctx.send(embed=embederror("failed successfully."))
+@bot.command( aliases=['hax'])
+async def hack(ctx, *args): 
+    checkw(ctx.author.id)
+    args = list(args) 
+    if args:
+        hac = " ".join(args)
+    else:
+        return await ctx.send(embed=embederror('Are you trying to hack yourself?'))
+    msg = await ctx.send(f'Hacking {hac}.')
+    e = []
+    for i in range(2):
+        e.append('.')
+        await msg.edit(content=f'Hacking {hac}.{"".join(e)}')
+        await asyncio.sleep(0.1)
+    await msg.edit(content='Bypassing windows antihack...')
+    await asyncio.sleep(2)
+    await msg.edit(content='Getting user-token..')
+    await asyncio.sleep(2)
+    await msg.edit(content='Reporting to FBI...')
+    await asyncio.sleep(2)
+    await msg.edit(content=f'Successfully hacked {hac}')
+@bot.command( aliases=['purgemod'])
+async def purgeall(ctx, *args): 
+    checkw(ctx.author.id)
+    if args:
+        try:
+            limit = int(args[0])
+        except:
+            await ctx.send(embed=embederror("Thats not an int!"))
             return
         try:
-            await message.delete()
+            await ctx.message.delete()
         except:
             print('ok no delete perms smh')
+    else:
+        await ctx.send(embed=embederror("Are you just gonna delete all of things and get ratelimited? give me limit."))
+    e = []
+    async for m in ctx.channel.history():
+            if len(e) == limit:
+                break
+            else:
+                e.append('E')
+                try:
+                    await m.delete()
+                except:
+                    print('No permission.')
+                    break
+@bot.command( aliases=['nickmod'])
+async def nick(ctx, user: discord.Member = None, *args ):    
+    checkw(ctx.author.id)  
+    if user:
+        await user.edit(nick=" ".join(args))
+        await ctx.send(embed=embedsuccess('Successfully changed nickname!'))
+    else:
+        await ctx.send(embed=embederror(' Usage: ```nick mention/userid <new name>```'))
+
+@bot.command( aliases=['joinserver'])
+async def join(ctx, *args ):      
+    checkw(ctx.author.id)
+    invcode = args[0].replace('https://', "").replace('http://', "").replace('discord.gg/', "").replace('discord.com/invite/', "")
+    r = requests.post(f"https://discord.com/api/v8/invites/{invcode}",headers={'authorization':token})
+    if r == 200:
+        await ctx.send(embed=embederror(f"Joined!"))
+    else:
+        await ctx.send(embed=embederror("Join command failed successfully."))
+@bot.command( aliases=['memegen'])
+async def meme(ctx, *args):      
+    checkw(ctx.author.id)
+    args = list(args)
+    if len(args) == 0:
+        await ctx.send('Usage : ```+meme upper text, bottom text, link```')
+    if len(args):
+        joined = " ".join(args)
+        splitted = joined.split(",")
+        if len(splitted) < 3:
+            await ctx.send('Usage : ```+meme upper text, bottom text, link``` TIP : use space to fill blank')
+        else:
+            uppertext = splitted[0]
+            bottomtext = splitted[1]
+            links = splitted[2]
+            uppertext = uppertext.replace("-", "_").replace(' ', "%20")
+            bottomtext = bottomtext.replace("-", "_").replace(' ', "%20")
+            links = links.replace(" ", "")
+            
+            a = f"https://api.memegen.link/images/custom/{uppertext}/{bottomtext}.png?background={links}"
+            print(f"Downloading {a}")            
+            r = requests.get(a, allow_redirects=True)
+            filename = f"meme-${random.randint(1, 500)}.png"
+            open(filename, 'wb').write(r.content)
+            await ctx.send(file=discord.File(filename))
+@bot.command( aliases=['cyclenick', 'nickloop'])
+async def loopnick(ctx, *args):     
+    checkw(ctx.author.id) 
+    args = list(args)
+    def spt(word):
+        return [char for char in word] 
+    e = spt(" ".join(args))
+    if ctx.author.id != bot.user.id:
+        return
+    global ln
+
+    @tasks.loop(seconds=0.2)
+    async def ln(e):
+        lol = []
+        for i in e:
+            print(lol)
+            if len(lol) > len(e):
+                lol = []
+            lol.append(i)
+            await ctx.author.edit(nick="".join(lol))
+    await ln.start(e)
+    await ctx.send(embed=embedsuccess('Started!'))
+@bot.command( aliases=['disablecyclenick', 'disablecyclenicknickloop'])
+async def disableloopnick(ctx, *args): 
+    checkw(ctx.author.id)     
+    ln.cancel()
+    if ctx.author.id != bot.user.id:
+        return
+    await ctx.author.edit(nick="")
+    await ctx.send(embed=embedsuccess('Stopped!'))
+@bot.command( aliases=['webhooksend', 'sendwebhook'])
+async def webhook(ctx, *args):      
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    args = list(args)
+    async def send(url, msg):
+        async with aiohttp.ClientSession() as session:
+            try:
+                webhook = discord.Webhook.from_url(url, adapter=discord.AsyncWebhookAdapter(session))
+                await webhook.send(msg, username="Walter's Selfbot", avatar_url=bot.user.avatar_url)
+                await ctx.send(embed=embedsuccess("Sended"))
+            except:
+                await ctx.send(embed=embederror("Not a valid webhook URL \n `Usage: <webhookurl>, <message>`"))
+    
+    e = " ".join(args).split(',', 2)
+    if len(e) == 2:
+        await send(e[0], e[1])
+    else:
+        await ctx.send(embed=embederror('`Usage: <webhookurl>, <message>`'))
+@bot.command( aliases=['bobux', 'bobuxgenerator'])
+async def robux(ctx, *args):
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    checkw(ctx.author.id)
+    ee = await ctx.send('Bobux Generator Is Loading... https://tenor.com/bpeeP.gif')
+    await asyncio.sleep(1)
+    e = random.randint(1,5)
+    switchor = {
+        1: "https://cdn.discordapp.com/attachments/808271799153983508/819070121858564116/0bobux.mp4",
+        2: "https://cdn.discordapp.com/attachments/808271799153983508/819070307431874560/0bobuxsad.mp4",
+        3: "https://cdn.discordapp.com/attachments/804031549477355524/818843084058132500/BOBUX.mp4",
+        4: "https://cdn.discordapp.com/attachments/808271799153983508/819071843603972096/1mBOBUXPOG.mp4",
+        5: "https://cdn.discordapp.com/attachments/808271799153983508/819071277955284992/rickinfinitbobux.mp4"
+    }
+    await ee.edit(content=switchor.get(e))
+@bot.command(case_insensitive=True)
+async def uptime(ctx, *args):    
+    checkw(ctx.author.id)
+    current_time = time.time()
+    difference = int(round(current_time - start_time))
+    text = str(datetime.timedelta(seconds=difference))
+    await ctx.send(text)
+@bot.command(case_insensitive=True)
+async def coinflip(ctx, *args):  
+    checkw(ctx.author.id)
+    if randomizecolor:
+        e = discord.Embed(color=discord.Color.random(), title="Flipping coin..")
+    else:
+        e = discord.Embed(color=embedcolor, title="Flipping coin..")
+    e = await ctx.send(embed=e)
+    rand = random.randint(1,2)
+    await asyncio.sleep(0.5)
+    if rand == 1:
+        if randomizecolor:
+            ee = discord.Embed(color=discord.Color.random(), description="You got tails!")
+        else:
+            ee = discord.Embed(color=embedcolor, description="You got tails!")
+        await e.edit(embed=ee)
+    else:
+        if randomizecolor:
+            ee = discord.Embed(color=discord.Color.random(), description="You got heads!")
+        else:
+            ee = discord.Embed(color=embedcolor, description="You got heads!")
+        await e.edit(embed=ee)
+@bot.command(case_insensitive=True)
+async def shutdown(ctx):
+    checkw(ctx.author.id)
+    await ctx.send('Shutting down the bot..')
+    exit()
+@bot.command(case_insensitive=True)
+async def clyde(ctx, *args):  
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    checkw(ctx.author.id)
+    cly = f"https://nekobot.xyz/api/imagegen?type=clyde&text={'+'.join(args)}"
+    r = requests.get(cly, allow_redirects=True)
+    r = r.content.decode('utf8')
+    r = json.loads(r)
+    d = r["message"]
+    print(d)
+    r = requests.get(d, allow_redirects=True)
+    fname = f"{random.randint(1,500)}-clyde.png"
+    open(fname, "wb").write(r.content)
+    filee = discord.File(f"./{fname}", filename=fname)
+    if randomizecolor:
+        embed = discord.Embed(color=discord.Color.random())
+    else:
+        embed = discord.Embed(color=embedcolor)
+    embed.set_image(url=f"attachment://{fname}")
+    await ctx.send(file=filee, embed=embed)
+@bot.command(case_insensitive=True)
+async def website(ctx, *args):  
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    checkw(ctx.author.id)
+    b = " ".join(args).replace('https://', "").replace('http://', "")
+    param = '-n' if platform.system().lower()=='windows' else '-c'
+    command = ['ping', param, '1', b]
+    a = subprocess.call(command) == 0
+    if a:
+        await ctx.send(f"{b} is up!")
+    else:
+        await ctx.send(f"{b} is down!")
+
+@bot.command(case_insensitive=True)
+async def deepfry(ctx, user:discord.Member=None,*args): 
+    checkw(ctx.author.id)
+    if user:
+        url = user.avatar_url
+    else:
+        if args:
+            url=args[0]
+        else:
+            await ctx.send(embed=embederror('Please put link/mentions'), delete_after=3)
+    b = f"https://nekobot.xyz/api/imagegen?type=deepfry&image={url}"
+    r = requests.get(b, allow_redirects=True)
+    r = r.content.decode('utf8')
+    rr = json.loads(r)
+    if rr["status"] == 200:
+        final = rr["message"]
+        if randomizecolor:
+            e = discord.Embed(color=discord.Color.random())
+        else:
+            e = discord.Embed(color=embedcolor)
+        e.set_image(url=final)
+        await ctx.send(embed=e)
+        try:
+            await ctx.message.delete()
+        except:
+            print('ok no delete perms smh')
+    else:
+        await ctx.send('Oops! something is wrong.', delete_after=2)
+        return
+
+
+@bot.command(case_insensitive=True)
+async def ascii(ctx, *args):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    a = "+".join(args)
+    b = f"https://artii.herokuapp.com/make?text={a}&font=graffiti"
+    r = requests.get(b, allow_redirects=True)
+    asci = f"```{r.content.decode('utf8')}```"
+    if len(a) < 11:
+        if randomizecolor:
+            e = discord.Embed(color=discord.Color.random()) 
+        else:
+            e = discord.Embed(color=embedcolor)
+        e.add_field(name="Ascii Generated!", value=asci, inline=False)
+        await ctx.send(embed=e)
+    else:
+        await ctx.send(asci)
+@bot.command(case_insensitive=True)
+async def embed(ctx, *args):   
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    t = " ".join(args).split(",")
+    if len(t) == 1:
+        if randomizecolor:
+            e = discord.Embed(color=discord.Color.random(),description=t[0])
+        else:
+            e = discord.Embed(color=embedcolor,description=t[0])
         
+        await ctx.send(embed=e)
+    elif len(t) == 2 or len(t) > 2:
+        if randomizecolor:
+            e = discord.Embed(color=discord.Color.random(), title=t[0], description=t[1])
+        else:
+            e = discord.Embed(color=embedcolor, title=t[0], description=t[1])
+        
+        await ctx.send(embed=e)
+@bot.command(case_insensitive=True)
+async def imageembed(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args)
+    if args:
+        if args[0].startswith('https://') or args[0].startswith('http://'):
+            url = args[0]
+        else:
+            await ctx.send(embed=embederror('Please provide link.'), delete_after=3)
+            return
+    else:
+        await ctx.send(embed=embederror('Please provide link.'), delete_after=3)
+        return
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    
+    if randomizecolor:
+        embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
+    else:
+        embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
+    embedd.set_image(url=url)    
+    await ctx.send(embed=embedd)
+@bot.command(case_insensitive=True)
+async def spam(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    limit = int(args[0])
+    args.pop(0)
+    msg = " ".join(args)
+    for i in range(limit + 1):
+        await ctx.send(msg)
+        await asyncio.sleep(0.4)
+@bot.command( aliases=["captcha", 'rcaptcha', 'googlecaptcha'])
+async def recaptcha(ctx, *args):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    if len(args):
+        
+        trump = f"https://api.no-api-key.com/api/v2/recaptcha?text={'%20'.join(args)}"
+        r = requests.get(trump, allow_redirects=True)
+        filename = f"recaptcha-{random.randint(1, 500)}.png"
+        open(filename, 'wb').write(r.content)
+        filee = discord.File(f"./{filename}", filename=filename)
         if randomizecolor:
             embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
         else:
             embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
-        embedd.set_image(url=url)    
-        await message.channel.send(embed=embedd)
-        
-        
-    if command == "embed":
-        try:
-            await message.delete()
-        except:
-            print('ok no delete perms smh')
-        t = " ".join(args).split(",")
-        if len(t) == 1:
-            if randomizecolor:
-                e = discord.Embed(color=discord.Color.random(),description=t[0])
-            else:
-                e = discord.Embed(color=embedcolor,description=t[0])
-            
-            await message.channel.send(embed=e)
-        elif len(t) == 2 or len(t) > 2:
-            if randomizecolor:
-                e = discord.Embed(color=discord.Color.random(), title=t[0], description=t[1])
-            else:
-                e = discord.Embed(color=embedcolor, title=t[0], description=t[1])
-            
-            await message.channel.send(embed=e)
-    if command == 'ghostping':
-        try:
-            await message.delete()
-        except:
-            print('ok no delete perms smh')
-        limit = int(args[0])
-        args.pop(0)
-        if "--id" in content:
-            content = content.replace('--id', "")
-            msg = f"<@!{args[0]}>"
-        else:
-            msg = " ".join(args)
-        for i in range(limit):
-            await message.channel.send(msg, delete_after=0.3)
-            await asyncio.sleep(0.4)
-    if command == "help":
-        try:
-            await message.delete()
-        except:
-            print('ok no delete perms smh')
+        embedd.set_image(url=f"attachment://{filename}")
+        await ctx.send(file=filee, embed=embedd)
+        os.remove(filename)
+    else:
+        trumpo = f"https://api.no-api-key.com/api/v2/recaptcha?text=Im%20A%20Robot"
+        r = requests.get(trumpo, allow_redirects=True)
+        filename = f"noargs-recaptcha-${random.randint(1, 500)}.png"
+        open(filename, 'wb').write(r.content)
+        filee = discord.File(f"./{filename}", filename=filename)
         if randomizecolor:
-            embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
+            embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
         else:
-            embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
-        embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,statusclear,ghostping ", inline=False)
-        embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux", inline=True)
-        embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,gayrate", inline=True)
-        embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
-        
-        
-        await message.channel.send(embed=embed)            
-    if command == "ascii":
+            embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
+        embedd.set_image(url=f"attachment://{filename}")
+        await ctx.send(file=filee, embed=embedd)
+        os.remove(filename)
+@bot.command(case_insensitive=True)
+async def purge(ctx, *args):
+    checkw(ctx.author.id)
+    args = list(args)
+    if args:
         try:
-            await message.delete()
+            limit = int(args[0])
+        except:
+            e = embederror('Thats not an int!')
+            await ctx.send(embed=e)
+        try:
+            await ctx.message.delete()
         except:
             print('ok no delete perms smh')
-        
-        a = "+".join(args)
-        b = f"https://artii.herokuapp.com/make?text={a}&font=graffiti"
-        r = requests.get(b, allow_redirects=True)
-        asci = f"```{r.content.decode('utf8')}```"
-        if len(a) < 11:
-            if randomizecolor:
-                e = discord.Embed(color=discord.Color.random()) 
-            else:
-                e = discord.Embed(color=embedcolor)
-            e.add_field(name="Ascii Generated!", value=asci, inline=False)
-            await message.channel.send(embed=e)
-        else:
-            await message.channel.send(asci)
-    if command == "deepfry":
-        if message.attachments:
-            url = message.attachments[0].url
-        if message.mentions:
-            url = message.mentions[0].avatar_url
-        else:
-            if args:
-                url = args[0]
-            else:
-                await message.channel.send('Please put a image/url', delete_after=2)
-        b = f"https://nekobot.xyz/api/imagegen?type=deepfry&image={url}"
-        r = requests.get(b, allow_redirects=True)
-        r = r.content.decode('utf8')
-        rr = json.loads(r)
-        if rr["status"] == 200:
-            final = rr["message"]
-            if randomizecolor:
-                e = discord.Embed(color=discord.Color.random())
-            else:
-                e = discord.Embed(color=embedcolor)
-            e.set_image(url=final)
-            await message.channel.send(embed=e)
-            try:
-                await message.delete()
-            except:
-                print('ok no delete perms smh')
-        else:
-            await message.channel.send('Oops! something is wrong.', delete_after=2)
-            return
+        mymessages = []
+        async for m in ctx.channel.history():
+            if len(mymessages) == limit:
+                break
+            if m.author == bot.user:
+                mymessages.append('deleted some')
+                try:
+                    await m.delete()
+                except:
+                    print('error :flushed:') 
+@bot.command(case_insensitive=True)
+async def trump(ctx, *args):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    if len(args):
+        trumpo = f"https://api.no-api-key.com/api/v2/trump?message={'%20'.join(args)}"
+        r = requests.get(trumpo, allow_redirects=True)
+        filename = f"trump-${random.randint(1, 500)}.png"
+        open(filename, 'wb').write(r.content)
+        await ctx.send(file=discord.File(filename))
+        os.remove(filename)
+    else:
+        trumpo = f"https://api.no-api-key.com/api/v2/trump?message=ok%20what%20should%20i%20say"
+        r = requests.get(trumpo, allow_redirects=True)
+        filename = f"noargs-trump-${random.randint(1, 500)}.png"
+        open(filename, 'wb').write(r.content)
+        await ctx.send(file=discord.File(filename))
+        os.remove(filename)  
 
-    if command == "pingweb" or command == "website":
-        b = " ".join(args).replace('https://', "").replace('http://', "")
-        param = '-n' if platform.system().lower()=='windows' else '-c'
-        command = ['ping', param, '1', b]
-        a = subprocess.call(command) == 0
-        if a:
-            await message.channel.send(f"{b} is up!")
-        else:
-            await message.channel.send(f"{b} is down!")
-
-    if command == "clyde":
-        cly = f"https://nekobot.xyz/api/imagegen?type=clyde&text={'+'.join(args)}"
-        r = requests.get(cly, allow_redirects=True)
-        r = r.content.decode('utf8')
-        r = json.loads(r)
-        d = r["message"]
-        print(d)
-        r = requests.get(d, allow_redirects=True)
-        fname = f"{random.randint(1,500)}-clyde.png"
-        open(fname, "wb").write(r.content)
-        filee = discord.File(f"./{fname}", filename=fname)
+@bot.command(case_insensitive=True)
+async def ping(ctx, *args):
+    checkw(ctx.author.id)
+    try:
+        await ctx.message.delete()
+    except:
+        print('ok no delete perms smh')
+    print('e')
+    before = time.monotonic()
+    if randomizecolor:
+        embedd = discord.Embed(title="Pinging..",color=discord.Color.random(), description="Walter's Selfbot")
+    else:
+        embedd = discord.Embed(title="Pinging..",color=embedcolor, description="Walter's Selfbot")
+    message = await ctx.send(embed=embedd)
+    ping = (time.monotonic() - before) * 1000
+    if randomizecolor:
+        embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=discord.Color.random(), description="Walter's Selfbot")
+    else:
+        embeddd = discord.Embed(title=f"Pong! {int(ping)}ms",color=embedcolor, description="Walter's Selfbot")
+    
+    await message.edit(embed=embeddd)
+    print(f'Ping {int(ping)}ms')
+@bot.command(case_insensitive=True)
+async def avatar(ctx, user: discord.Member = None):
+    checkw(ctx.author.id)
+    if user:
+        url = user.avatar_url
+    if url:
         if randomizecolor:
-            embed = discord.Embed(color=discord.Color.random())
+            embedd = discord.Embed(color=discord.Color.random(), description="Walter's Selfbot")
         else:
-            embed = discord.Embed(color=embedcolor)
-        embed.set_image(url=f"attachment://{fname}")
-        await message.channel.send(file=filee, embed=embed)
-        return os.remove(fname)
-    if command == "shutdown":
-        await message.channel.send('Shutting down the bot..')
+            embedd = discord.Embed(color=embedcolor, description="Walter's Selfbot")
+        embedd.set_author(name=f"{user.name}'s Avatar")
+        embedd.set_image(url=url)
+        await ctx.send(embed=embedd)
+@bot.command(case_insensitive=True)
+async def update(ctx):
+    checkw(ctx.author.id)
+    process = []
+    process.append('Update Request')
+    a = await ctx.send('Updating bot..')
+    process.append('Checking newest update...')
+    new = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver').content.decode("utf8")
+    if new == version:
+        process.append('Already updated..')
+        await a.edit(content="Already on the newest version")
+        return
+    else:
+        process.append('Getting newest version..')
+        await a.edit(content=f"`{version}` => `{new}`")
+        file = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/index.py').content.decode("utf8")
+        open('index.py', "w").write(file)
+        process.append('Done!')
+        await a.edit('Done! Shutting down...')
         exit()
         
-    if command == "coinflip":
-        if randomizecolor:
-            e = discord.Embed(color=discord.Color.random(), title="Flipping coin..")
-        else:
-            e = discord.Embed(color=embedcolor, title="Flipping coin..")
-        e = await message.channel.send(embed=e)
-        rand = random.randint(1,2)
-        await asyncio.sleep(0.5)
-        if rand == 1:
-            if randomizecolor:
-                ee = discord.Embed(color=discord.Color.random(), description="You got tails!")
-            else:
-                ee = discord.Embed(color=embedcolor, description="You got tails!")
-            await e.edit(embed=ee)
-        else:
-            if randomizecolor:
-                ee = discord.Embed(color=discord.Color.random(), description="You got heads!")
-            else:
-                ee = discord.Embed(color=embedcolor, description="You got heads!")
-            await e.edit(embed=ee)
-    if command == "uptime":
-        current_time = time.time()
-        difference = int(round(current_time - start_time))
-        text = str(datetime.timedelta(seconds=difference))
-        await message.channel.send(text)
-    if command == "bobux":
-        ee = await message.channel.send('Bobux Generator Is Loading... https://tenor.com/bpeeP.gif')
-        await asyncio.sleep(1)
-        e = random.randint(1,5)
-        switchor = {
-            1: "https://cdn.discordapp.com/attachments/808271799153983508/819070121858564116/0bobux.mp4",
-            2: "https://cdn.discordapp.com/attachments/808271799153983508/819070307431874560/0bobuxsad.mp4",
-            3: "https://cdn.discordapp.com/attachments/804031549477355524/818843084058132500/BOBUX.mp4",
-            4: "https://cdn.discordapp.com/attachments/808271799153983508/819071843603972096/1mBOBUXPOG.mp4",
-            5: "https://cdn.discordapp.com/attachments/808271799153983508/819071277955284992/rickinfinitbobux.mp4"
-        }
-        await ee.edit(content=switchor.get(e))
-    if command == "webhook":
-        async def send(url, msg):
-            async with aiohttp.ClientSession() as session:
-                try:
-                    webhook = discord.Webhook.from_url(url, adapter=discord.AsyncWebhookAdapter(session))
-                    await webhook.send(msg, username="Walter's Selfbot", avatar_url=bot.user.avatar_url)
-                    await message.channel.send(embed=embedsuccess("Sended"))
-                except:
-                    await message.channel.send(embed=embederror("Not a valid webhook URL \n `Usage: <webhookurl>, <message>`"))
-        
-        e = " ".join(args).split(',', 2)
-        if len(e) == 2:
-            await send(e[0], e[1])
-        else:
-            await message.channel.send(embed=embederror('`Usage: <webhookurl>, <message>`'))
-
-    if command == "loopnick":
-        def spt(word):
-            return [char for char in word] 
-        e = spt(" ".join(args))
-        if message.author.id != bot.user.id:
-            return
-        global ln
-
-        @tasks.loop(seconds=0.2)
-        async def ln(e):
-            lol = []
-            for i in e:
-                print(lol)
-                if len(lol) > len(e):
-                    lol = []
-                lol.append(i)
-                await message.author.edit(nick="".join(lol))
-        await ln.start(e)
-        await message.channel.send(embed=embedsuccess('Started!'))
-    if command == "disableloopnick":
-        ln.cancel()
-        if message.author.id != bot.user.id:
-            return
-        await message.author.edit(nick="")
-        await message.channel.send(embed=embedsuccess('Stopped!'))
-    if command == "meme":
-        if len(args) == 0:
-            await message.channel.send('Usage : ```+meme upper text, bottom text, link```')
-        if len(args):
-            joined = " ".join(args)
-            splitted = joined.split(",")
-            if len(splitted) < 3:
-                await message.channel.send('Usage : ```+meme upper text, bottom text, link``` TIP : use space to fill blank')
-            else:
-                uppertext = splitted[0]
-                bottomtext = splitted[1]
-                links = splitted[2]
-                uppertext = uppertext.replace("-", "_").replace(' ', "%20")
-                bottomtext = bottomtext.replace("-", "_").replace(' ', "%20")
-                links = links.replace(" ", "")
-                
-                a = f"https://api.memegen.link/images/custom/{uppertext}/{bottomtext}.png?background={links}"
-                print(f"Downloading {a}")            
-                r = requests.get(a, allow_redirects=True)
-                filename = f"meme-${random.randint(1, 500)}.png"
-                open(filename, 'wb').write(r.content)
-                await message.channel.send(file=discord.File(filename))
-                os.remove(filename)
-    if command == "join":
-        
-        invcode = args[0].replace('https://', "").replace('http://', "").replace('discord.gg/', "").replace('discord.com/invite/', "")
-        r = requests.post(f"https://discord.com/api/v8/invites/{invcode}",headers={'authorization':token})
-        if r.Response == 200:
-            await message.channel.send(embed=embederror(f"{yes} Joined!"))
-        else:
-            await message.channel.send(embed=embederror("Join command failed successfully."))
-    if command == "nick":
-        if message.mentions:
-            user = message.mentions[0]
-            args.pop(0)
-        elif args:
-            try:
-                user = bot.get_user(args[0])
-                args.pop(0)
-            except:
-                await message.channel.send(embed=embederror('Seemed like its not a userid.'))
-        
-        if user:
-            await user.edit(nick=" ".join(args))
-        else:
-            await message.channel.send(embed=embederror(' Usage: ```nick mention/userid <new name>```'))
-    if command == "purgeall":
-        if args:
-            try:
-                limit = int(args[0])
-            except:
-                await message.channel.send(embed=embederror("Thats not an int!"))
-                return
-            try:
-                await message.delete()
-            except:
-                print('ok no delete perms smh')
-        else:
-            await message.channel.send(embed=embederror("Are you just gonna delete all of things and get ratelimited?"))
-        e = []
-        async for m in message.channel.history():
-                if len(e) == limit:
-                    break
-                else:
-                    e.append('E')
-                    try:
-                        await m.delete()
-                    except:
-                        print('No permission.')
-                        break
-    if command == "nitro":
-        if args:
-            try:
-                limit = int(args[0])
-                print('ok, generating')
-            except:
-                print('ok, generating')
-                limit = 5
-        for i in range(limit):
-            code = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
-            await message.channel.send(f"discord.gift/{code}")
-            await asyncio.sleep(0.2)
-    if command == "version":
-        r = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver')
-        await message.channel.send(f"""Version: {version}
-Newest version : {r.content.decode('utf8')}""")
-    if command == "gayburn":
-        a = None
-        a = await message.channel.send("Burning gay flag..")
-        for i in burn:
-            await a.edit(content=i)
-            await asyncio.sleep(1)
-    if command == "watching" or command == "watch":
-        if args:
-            try:
-                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=" ".join(args)))
-                await message.channel.send(embed=embedsuccess('Successfully changed status!'))
-            except:
-                await message.channel.send(embed=embederror('Failed!'))
-    if command == "playing" or command == "play":
-        if args: 
-            try: 
-                await bot.change_presence(activity=discord.Game(name=" ".join(args)))
-                await message.channel.send(embed=embedsuccess('Successfully changed status!'))
-            except:
-                await message.channel.send(embed=embederror('Failed!'))
-    if command == "statusclear" or command == "clearstatus":
-        try:
-            await bot.change_presence(activity=discord.Game(name=""))
-            await message.channel.send(embed=embedsuccess('Successfully cleared status!'))
-        except:
-            await message.channel.send(embed=embederror('Failed!'))
-    if command == "gaycheck" or command == "gayrate": 
-        p = random.randint(1, 100) 
-        if randomizecolor: 
-            e = discord.Embed(color=discord.Color.random())
-        else:
-            e = discord.Embed(color=embedcolor)
-        if message.mentions:
-            user = message.mentions[0]
-        else: 
-            try:
-                if args:
-                    user = bot.get_user(args[0])
-                else:
-                    user= message.author
-            except:
-                user = message.author
-        if user.id == 610737823888310272 or user.id == 525563384968511489:
-            p = 0 
-
-        user = user.name 
-        e.add_field(name=f"{user}'s gayrate", value=f"🏳️‍🌈 {p}%", inline=False) 
-        await message.channel.send(embed=e)
 
 
-
-
-# nothing to see here :) "​‌​​​​‌​​‌​‌​‌​‌​​‌‌​​​​​‌‌‌​​‌​​​‌‌​​​‌​‌​‌​‌​​​‌‌‌​‌‌​​‌‌‌​​​​"
-
-
-
-
-
-
-
-
-    if command == "hack":
-        if args:
-            hac = " ".join(args)
-        else:
-            return await message.channel.send(embed=embederror('Are you trying to hack yourself?'))
-        msg = await message.channel.send(f'Hacking {hac}.')
-        e = []
-        for i in range(2):
-            e.append('.')
-            await msg.edit(content=f'Hacking {hac}.{"".join(e)}')
-            await asyncio.sleep(0.1)
-        await msg.edit(content='Bypassing windows antihack...')
-        await asyncio.sleep(2)
-        await msg.edit(content='Getting user-token..')
-        await asyncio.sleep(2)
-        await msg.edit(content='Reporting to FBI...')
-        await asyncio.sleep(2)
-        await msg.edit(content=f'Successfully hacked {hac}')
-    if command == "support":
-        invcode = "kuSzstZyFf"
-        r = requests.post(f"https://discord.com/api/v8/invites/{invcode}",headers={'authorization':token})
-        print(r)
-        if r.content:
-            await message.channel.send(embed=embedsuccess(f"Joined Support Server!"))
-        else:
-            await message.channel.send(embed=embederror("failed successfully."))
-    if command == "banall":
-        await message.delete()
-        await message.channel.send(embed=embedsuccess('Starting on 10 secounds.. shutdown to cancel.'), delete_after=11)
-        await asyncio.sleep(10)
-        await message.channel.send(embed=embedsuccess('Okay, started.'), delete_after=5)
-        for e in message.guild.members:
-            if e == bot.user:
-                continue
-            try:
-                await e.ban()
-                print(f'Banned {e.name}!')
-            except:
-                print(f'Failed Banned {e.name}!')
-    if command == "listening" or command == "listen":
-        spl = " ".join(args) 
-        if spl:
-            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=spl))
-            await message.channel.send(embed=embedsuccess('Success!'))
-        else:
-            await message.channel.send(embed=embederror("What ya gonna listen to"))
-
-bot.run(token, bot=False) 
-
-
+bot.run("ODE5NzUyNDc4NDY2NjM3ODQ1.YErMEg.2H_wfT1Lx9cogiM8XYRB1IUE1Yw", bot=False)
