@@ -773,12 +773,15 @@ async def getrandom(ctx, *args):
             await asyncio.sleep(1)
 @bot.command(aliases=['tableflip'])
 async def fliptable(ctx):
+    checkw(ctx.author.id)
     await ctx.message.delete()
     a = await ctx.send('┬─┬ ノ( ゜-゜ノ)')
     await asyncio.sleep(0.5)
     await a.edit(content='(╯°□°）╯︵ ┻━┻')
 @bot.command(aliases=['dmspam'])
 async def spamdm(ctx, member: discord.Member = None, *args):
+    checkw(ctx.author.id)
+    await ctx.message.delete()
     if args:
         args = list(args)
         if member:
@@ -796,10 +799,4 @@ async def spamdm(ctx, member: discord.Member = None, *args):
                     await asyncio.sleep(1)
             else:
                 return await ctx.send('What the fuck was should be the message? specify it. ')
-
-
-
-
-
-
 bot.run(token, bot=False)
