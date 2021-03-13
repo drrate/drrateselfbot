@@ -4,7 +4,7 @@ yes = "✅"
 no = "❎"
 
 
-versione = '2 REWRITE'
+versione = '2.1'
 
 
 #config reading  
@@ -119,13 +119,23 @@ async def help(ctx):
     if randomizecolor:
         embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
     else:
-        embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot")
-    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,statusclear,ghostping ", inline=False)
+        embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
+    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam ", inline=False)
     embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux", inline=True)
     embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick", inline=True)
     embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
-        
-        
+    embed.add_field(name="dogecoin", value=r'dogetotal,dogebal,dogediff ', inline=True)
+ # help command        
+#
+#
+#
+ #
+#
+#
+#
+#
+#
+ #       
     await ctx.send(embed=embed)  
 
 @bot.command( aliases=['ghostspam'])
@@ -795,8 +805,58 @@ async def spamdm(ctx, member: discord.Member = None, *args):
             if msg:
                 await ctx.send(embed=embedsuccess(f"Spamming {member}'s dms!"))
                 for i in range(limit):
-                    member.send(msg)
+                    await member.send(msg)
                     await asyncio.sleep(1)
             else:
                 return await ctx.send('What the fuck was should be the message? specify it. ')
+@bot.command(aliases=['streaming'])
+async def stream(ctx,*args):
+    checkw(ctx.author.id)
+    if args:
+        await bot.change_presence(activity=discord.Streaming(name=" ".join(args), url='https://www.youtube.com/watch?v=iik25wqIuFo&feature=emb_title'))
+        await ctx.send(embed=embedsuccess('Successfully changed status!'))
+    else:
+        await ctx.send(embed='What should ya stream?')
+@bot.command(aliases=['dogecoinbalance', 'dogecoinbal'])
+async def dogebal(ctx,*args):
+    args = list(args)
+    print(args)
+    if args:
+        link = f"http://dogechain.info/chain/Dogecoin/q/addressbalance/{args[0]}"
+
+        r = requests.get(link, allow_redirects=True)
+        r = r.content.decode('utf8')
+        if randomizecolor:
+            e = discord.Embed(color=discord.Color.random(), title=f"{args[0]}'s Balance", description=f"{r} DOGES")
+        else: 
+            e = discord.Embed(color=embedcolor, title=f"{args[0]}'s Balance", description=f"{r} DOGES")   
+        await ctx.send(embed=e)
+    else:
+        await ctx.send(embed=embederror('What was the dogecoin address?'), delete_after=3)
+@bot.command(aliases=['dogecoindifficulty', 'dogedifficulty'])
+async def dogediff(ctx):
+    link = f"http://dogechain.info/chain/Dogecoin/q/getdifficulty"
+
+    r = requests.get(link, allow_redirects=True)
+    r = r.content.decode('utf8')
+    if randomizecolor:
+        e = discord.Embed(color=discord.Color.random(), title=f"Last solved block's difficulty : {r}")
+    else: 
+        e = discord.Embed(color=embedcolor, title=f"Last solved block's difficulty : {r}")
+    await ctx.send(embed=e)
+@bot.command(aliases=['dogecointotal', 'dogestotal'])
+async def dogetotal(ctx):
+    link = f"https://dogechain.info/chain/Dogecoin/q/totalbc"
+
+    r = requests.get(link, allow_redirects=True)
+    r = r.content.decode('utf8')
+    if randomizecolor:
+        e = discord.Embed(color=discord.Color.random(), title=f"Dogecoin mined total : {r}")
+    else: 
+        e = discord.Embed(color=embedcolor, title=f"Dogecoin mined total : {r}")
+    await ctx.send(embed=e)
+        
+
+
+
 bot.run(token, bot=False)
