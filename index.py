@@ -1,10 +1,25 @@
-from discord.ext import tasks, commands
-import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math
+try:
+    from discord.ext import tasks, commands
+    import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math
+except:
+    print('Required libs isnt installed, installing..')
+    import os
+    if os.name == "nt":
+        # windows
+        os.system("py -3 -m pip install requests discord.py")
+    else:
+        # linux, mac, bsd, openbsd, etc
+        os.system("python3 -m pip install requests discord.py")
+    print("Installed!")
+    print('Importing libs..')
+    from discord.ext import tasks, commands
+    import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math
+    print ("Done!")
 yes = "✅"
 no = "❎"
 
 
-versione = '2.2'
+versione = '2.2.6'
 
 
 #config reading  
@@ -129,8 +144,8 @@ async def help(ctx):
     else:
         embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
     embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam ", inline=False)
-    embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux,dog,minecraft,corona", inline=True)
-    embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,predictgender", inline=True)
+    embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux,dog,minecraft,corona,proxy", inline=True)
+    embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,predictgender,lag,bitcoin", inline=True)
     embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
     embed.add_field(name="dogecoin", value=r'dogetotal,dogebal,dogediff ', inline=True)
  # help command        
@@ -562,7 +577,7 @@ async def ascii(ctx, *args):
     except:
         print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     a = "+".join(args)
-    b = f"https://artii.herokuapp.com/make?text={a}&font=graffiti"
+    b = f"https://artii.herokuapp.com/make?text={a}"
     r = requests.get(b, allow_redirects=True)
     asci = f"```{r.content.decode('utf8')}```"
     if len(a) < 11:
@@ -1001,8 +1016,66 @@ async def minecraft(ctx, *args):
         f = f"{random.randint(1,203)}-achievement-walterselfbot.png"
         open(f, "wb").write(r)
         await ctx.send(file=discord.File(f"./{f}"))
+        os.remove(f)
     else:
         await ctx.send(embed=embederror('achievement : nothing'))
+
+@bot.command()
+async def bitcoin(ctx):
+    resp = requests.get('https://blockchain.info/ticker')
+    pret = resp.json()['USD']['last']
+    pret1 = resp.json()['EUR']['last']
+    pret2 = resp.json()['GBP']['last']
+    try:
+        if randomizecolor:
+            embed = discord.Embed(color=discord.Color.random(), title="Bitcoin Price")
+        else:
+            embed = discord.Embed(color=embedcolor, title="Bitcoin Price")
+        embed.add_field(name="BTC Current Price:", value=f"${pret}\n€{pret1}\n£{pret2}", inline=True)
+        embed.set_thumbnail(url="https://st3.depositphotos.com/5906102/14454/v/600/depositphotos_144548047-stock-illustration-crypto-currency-bitcoin-golden-symbol.jpg")
+        await ctx.send(embed=embed)
+    except:
+        ctx.send("BTC Current Price:", value=f"${pret}\n€{pret1}\n£{pret2}")
+@bot.command(aliases=["lagcord"])
+async def lag(ctx, *args):
+    
+    if args:
+        args = list(args)
+        if args[0] == "stop":
+            try:
+                xdxd.stop()
+                return await ctx.send(embed=embedsuccess('Successfully stopped'))
+            except:
+                return await ctx.send(embed=embederror("Failed stopping lag machien rip"))
+        try:
+            limit = int(args[0])
+        except:
+            limit = 5
+        msg = []
+        for r in ctx.guild.roles:
+            msg.append(f"<@&{r.id}>")
+        for channel in ctx.guild.channels:
+            msg.append(f"<#{channel.id}>")
+        if len(msg)*5 < 2001:
+            a = "".join(msg), "".join(msg), "".join(msg), "".join(msg), "".join(msg)
+        else:
+            a = "".join(msg)
+        
+        @tasks.loop(seconds=1,count=limit)
+        async def xdxd():
+            await ctx.send(" ".join(a))
+        xdxd.start()
+    else:
+        msg = []
+        for r in ctx.guild.roles:
+            msg.append(f"<@&{r.id}>")
+        for channel in ctx.guild.channels:
+            msg.append(f"<#{channel.id}>")
+        if len(msg)*5 < 2001:
+            a = "".join(msg), "".join(msg), "".join(msg), "".join(msg), "".join(msg)
+        else:
+            a = "".join(msg)
+        await ctx.send(" ".join(a))
 
 
 bot.run(token, bot=False)
