@@ -1,8 +1,5 @@
 {
     "prefix": "!",
-    "whitelisted": [
-        "userid, you dont need your own userid. leave blank if you dont need to whitelist someone."
-    ],
     "token": "usertoken, kinda hard to get this but heres a tutorial : https://www.youtube.com/watch?v=WWHZoa0SxCc",
     "embedcolor": "green",
     "randomcolor": "true/false",
