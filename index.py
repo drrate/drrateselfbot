@@ -19,7 +19,7 @@ yes = "✅"
 no = "❎"
 
 
-versione = '2.2.6'
+versione = '2.3'
 
 
 #config reading  
@@ -98,8 +98,9 @@ def embedsuccess(ee):
         e = discord.Embed(color=embedcolor, title=f"{yes} {ee}")
     return e
 
+intents = discord.Intents().all()
 
-bot = commands.Bot(prefix, self_bot=True, case_insensitive=True)
+bot = commands.Bot(prefix, self_bot=True, case_insensitive=True, intents=intents)
 bot.remove_command('help')
 @bot.event
 async def on_ready():
@@ -1022,6 +1023,10 @@ async def minecraft(ctx, *args):
 
 @bot.command()
 async def bitcoin(ctx):
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     resp = requests.get('https://blockchain.info/ticker')
     pret = resp.json()['USD']['last']
     pret1 = resp.json()['EUR']['last']
@@ -1038,7 +1043,10 @@ async def bitcoin(ctx):
         ctx.send("BTC Current Price:", value=f"${pret}\n€{pret1}\n£{pret2}")
 @bot.command(aliases=["lagcord"])
 async def lag(ctx, *args):
-    
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
     if args:
         args = list(args)
         if args[0] == "stop":
@@ -1078,4 +1086,70 @@ async def lag(ctx, *args):
         await ctx.send(" ".join(a))
 
 
+
+@bot.command(aliases=['dm_all', "directmessageall","directmessage_all"])
+async def dmall(ctx, *args):
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
+    args = list(args)
+    if args:
+        members = ctx.guild.members
+        for member in members:
+            if member == bot.user:
+                break
+            try:
+                if len(" ".join(args)) > 2000: 
+                  return await ctx.send(embed=embederror("Discord Limit / Message cant be 2000>"))
+                await member.send(" ".join(args))
+                print(f"{bcolors.OKGREEN}[DMALL] Successfully dmed {member.name} with {' '.join(args)}!{bcolors.ENDC}")
+            except:
+                print(f"{bcolors.FAIL}[DMALL] Failed to dm {member.name}{bcolors.ENDC}")
+    else:
+        await ctx.send(embed=embederror("A message was not provided."))
+@bot.command(aliases=['loop_status'])
+async def loopstatus(ctx, *args):
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
+    if args:
+        def spt(word):
+            return [char for char in word] 
+        status = " ".join(args)
+        status = spt(status)
+        a = True
+        global ls
+        @tasks.loop(seconds=2)
+        async def ls(status):
+            xd = []
+            for i in status:
+                if "".join(xd) == "".join(status):
+                    xd = []
+                if i == " ":
+                    xd.append(i)
+                else:
+                    xd.append(i)
+                    payload = {"custom_status":{"text":"".join(xd)}}
+                    e = requests.patch('https://discord.com/api/v8/users/@me/settings', headers={'authorization':token}, json=payload)
+                    await asyncio.sleep(1)
+        ls.start(status)
+        await ctx.send(embed=embedsuccess("Started! this feature is in beta™️"))
+    else:
+        await ctx.send(embed=embederror('A status was not provided.'))
+@bot.command(aliases=['disableloop_status'])
+async def disableloopstatus(ctx, *args):
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
+    try:
+        ls.stop()
+    except:
+        return await ctx.send(embed=embederror("Failed."))
+    payload = {"custom_status":{"text":""}}
+    e = requests.patch('https://discord.com/api/v8/users/@me/settings', headers={'authorization':token}, json=payload)
+    await ctx.send(embed=embedsuccess('Stopped loopstatus!'))
+    
 bot.run(token, bot=False)
