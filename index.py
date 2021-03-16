@@ -144,7 +144,7 @@ async def help(ctx):
         embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
     else:
         embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
-    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam ", inline=False)
+    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam,dmall,loopstatus,loopnick ", inline=False)
     embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux,dog,minecraft,corona,proxy", inline=True)
     embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,predictgender,lag,bitcoin", inline=True)
     embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
