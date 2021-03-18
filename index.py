@@ -1160,7 +1160,7 @@ async def disableloopstatus(ctx, *args):
     e = requests.patch('https://discord.com/api/v8/users/@me/settings', headers={'authorization':token}, json=payload)
     await ctx.send(embed=embedsuccess('Stopped loopstatus!'))
     
-@bot.command(aliases=['statussync'])
+@bot.command(aliases=['statussync', 'status_sync'])
 async def sync_status(ctx, *args):
     try:
         await ctx.message.delete()
