@@ -19,7 +19,7 @@ yes = "✅"
 no = "❎"
 
 
-versione = '2.3'
+versione = '2.4'
 
 
 #config reading  
@@ -52,10 +52,15 @@ def getcolor(argument):
     }
     argument = argument.replace(' ', "_").lower()
     return switcher.get(argument, "") 
-config = open('config.json', 'r')
-config = config.read()
-config = json.loads(config) 
+try:
+    config = open('config.json', 'r')
+    config = config.read()
 
+    config = json.loads(config) 
+except:
+    print("config.json isnt in the folder, terminating ( for help, go https://discord.gg/kuSzstZyFf or https://discord.io/walters )")
+    time.sleep(5)
+    exit()
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -122,14 +127,16 @@ async def on_ready():
 
 @bot.event
 async def on_guild_channel_create(channel):
-
-    if frr:
-        if "ticket" in channel.name: return
-        try:
-            await channel.send('first')
-            print(f'first on {channel.name} in {channel.guild}')
-        except:
-            print(f'No access on {channel.guild} - {channel.name}')
+    try:
+        if frr:
+            if "ticket" in channel.name: return
+            try:
+                await channel.send('first')
+                print(f'first on {channel.name} in {channel.guild}')
+            except:
+                print(f'No access on {channel.guild} - {channel.name}')
+    except:
+        int("2") # ok
         
 
 @bot.command()
@@ -144,9 +151,9 @@ async def help(ctx):
         embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
     else:
         embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
-    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam,dmall,loopstatus,loopnick ", inline=False)
-    embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux,dog,minecraft,corona,proxy", inline=True)
-    embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,predictgender,lag,bitcoin", inline=True)
+    embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam,dmall,loopstatus,disableloopstatus,loopnick,status_sync,disablestatus_sync", inline=False)
+    embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux,dog,minecraft,corona,proxy,meme", inline=True)
+    embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,predictgender,lag,bitcoin,pi", inline=True)
     embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
     embed.add_field(name="dogecoin", value=r'dogetotal,dogebal,dogediff ', inline=True)
  # help command        
@@ -396,6 +403,7 @@ async def meme(ctx, *args):
             filename = f"meme-${random.randint(1, 500)}.png"
             open(filename, 'wb').write(r.content)
             await ctx.send(file=discord.File(filename))
+            os.remove(filename)
 @bot.command( aliases=['cyclenick', 'nickloop'])
 async def loopnick(ctx, *args):     
      
@@ -1152,4 +1160,71 @@ async def disableloopstatus(ctx, *args):
     e = requests.patch('https://discord.com/api/v8/users/@me/settings', headers={'authorization':token}, json=payload)
     await ctx.send(embed=embedsuccess('Stopped loopstatus!'))
     
+@bot.command(aliases=['statussync'])
+async def sync_status(ctx, *args):
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
+    if args:
+        def spt(word):
+            return [char for char in word] 
+        status = " ".join(args)
+        if "|" not in status:
+            return await ctx.send(embed=embederror("2rd status was not provided, split with | "))
+        s = status.split('|')
+        global lsb
+        @tasks.loop(seconds=len(s))
+        async def lsb(status):
+            for i in status:
+                payload = {"custom_status":{"text":i}}
+                e = requests.patch('https://discord.com/api/v8/users/@me/settings', headers={'authorization':token}, json=payload)
+                await asyncio.sleep(2)
+        lsb.start(s)
+        await ctx.send(embed=embedsuccess("Started! this feature is in beta™️"))
+    else:
+        await ctx.send(embed=embederror('A status was not provided.'))
+@bot.command(aliases=['disablestatus_sync'])
+async def disablestatussync(ctx, *args):
+    try:
+        await ctx.message.delete()
+    except:
+        print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
+    lsb.stop()
+    payload = {"custom_status":{"text":""}}
+    e = requests.patch('https://discord.com/api/v8/users/@me/settings', headers={'authorization':token}, json=payload)
+    await ctx.send(embed=embedsuccess('Stopped status sync!'))
+@bot.command(aliases=['generatepi'])
+async def pi(ctx, *args):
+    if args: d = args[0]
+    else: 
+        await ctx.send(embed=embederror("Limit was not provided, continuing with 100"))
+        d = 100
+    
+    def pi_digits(x):
+        x = int(x)
+        k,a,b,a1,b1 = 2,4,1,12,4
+        while x > 0:
+            p,q,k = k * k, 2 * k + 1, k + 1
+            a,b,a1,b1 = a1, b1, p*a + q*a1, p*b + q*b1
+            d,d1 = a/b, a1/b1
+            while d == d1 and x > 0:
+                yield int(d)
+                x -= 1
+                a,a1 = 10*(a % b), 10*(a1 % b1)
+                d,d1 = a/b, a1/b1
+    try:
+        d = int(d) + 3
+        if d > 1900:
+            return await ctx.send(embed=embederror('Cant be greater than 1900'))
+    except:
+        await ctx.send(embed=embederror('Input was not an int'))
+        exit()
+    digits = [str(n) for n in list(pi_digits(d))]
+    digits = digits[:1] + ['.'] + digits[1:]
+    if randomizecolor:
+        r = discord.Embed(color=discord.Color.random(), description=f"Generated with spigot's algorithm ```\n{''.join(digits)}\n```")
+    else:
+        r = discord.Embed(color=embedcolor,description=f"Generated with spigot's algorithm ```\n{''.join(digits)}\n```")
+    await ctx.send(embed=r)
 bot.run(token, bot=False)
