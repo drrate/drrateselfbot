@@ -411,8 +411,7 @@ async def loopnick(ctx, *args):
     def spt(word):
         return [char for char in word] 
     e = spt(" ".join(args))
-    if ctx.author.id != bot.user.id:
-        return
+
     global ln
 
     @tasks.loop(seconds=0.2)
