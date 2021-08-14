@@ -6,22 +6,24 @@ except:
     import os
     if os.name == "nt":
         # windows
-        os.system("py -3 -m pip install requests discord.py")
+        os.system("py -3 -m pip install requests discord.py wget")
     else:
         # linux, mac, bsd, openbsd, etc
-        os.system("python3 -m pip install requests discord.py")
+        os.system("python3 -m pip install requests discord.py wget")
     print("Installed!")
     print('Importing libs..')
     from discord.ext import tasks, commands
-    import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math
+    import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math, wget
     print ("Done!")
 yes = "✅"
 no = "❎"
 
 
-versione = '2.5'
+versione = '2.4'
 latestver = wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
-
+if latestver > versione:
+    print("Selfbot is out of date, updating....")
+    wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latest/index.py')
 
 #config reading  
 
