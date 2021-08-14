@@ -20,15 +20,20 @@ no = "❎"
 
 
 versione = '2.4'
+#wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
+#latestversion = 'latestversion'
 latestver = wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
-if latestver > versione:
+os.remove('latestversion')
+if latestver != versione:
     print("Selfbot is out of date, updating....")
     wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latest/index.py-1')
     os.rename('index.py','index-old.py')
+    os.remove('index-old.py')
     os.rename('index.py-1','index.py')
     os.system('py -3 index.py')
     exit()
-
+else:
+    pass
 #config reading  
 
 def getcolor(argument): 
