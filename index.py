@@ -55,9 +55,18 @@ def getcolor(argument):
 try:
     config = open('config.json', 'r')
     config = config.read()
-
     config = json.loads(config) 
 except:
+    import wget
+    print('Downloading default config...')
+    wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/defconfig.json')
+    os.rename("defconfig.json", "config.json")
+    config = open('config.json', 'r')
+    config = config.read()
+    config = json.loads(config) 
+if config['setup'] == "1":
+    pass
+else:
     print("Config is not set up, please go to https://drrateselfbot.drratedevelopment.tk/setup.")
     time.sleep(5)
     exit()
