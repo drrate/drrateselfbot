@@ -19,10 +19,10 @@ yes = "✅"
 no = "❎"
 
 
-versione = '2.4'
+versione = '2'
 #wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
 #latestversion = 'latestversion'
-latestver = wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
+latestver = wget.download('https://raw.githubusercontent.com/drrate/cdn1/main/drrateselfbot/latestversion')
 os.remove('latestversion')
 if latestver != versione:
     print("Selfbot is out of date, updating....")
