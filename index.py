@@ -1,6 +1,6 @@
 try:
     from discord.ext import tasks, commands
-    import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math
+    import json, time, discord, requests, random, os, asyncio, subprocess, platform, datetime, aiohttp, string, math, wget
 except:
     print('Required libs isnt installed, installing..')
     import os
@@ -23,7 +23,7 @@ versione = '2.4'
 latestver = wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
 if latestver > versione:
     print("Selfbot is out of date, updating....")
-    wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latest/index.py')
+    wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latest/index.py-1')
 
 #config reading  
 
