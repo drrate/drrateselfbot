@@ -19,7 +19,7 @@ yes = "✅"
 no = "❎"
 
 
-versione = "['2']"
+versione = '2.4'
 #config reading  
 
 def getcolor(argument): 
@@ -65,7 +65,7 @@ except:
 if config['setup'] == "1":
     pass
 else:
-    print("Config is not set up, please go to https://drrateselfbot.drratedevelopment.tk/setup.")
+    print("\nConfig is not set up, please go to https://drrateselfbot.drratedevelopment.tk/setup.")
     time.sleep(5)
     exit()
 class bcolors:
