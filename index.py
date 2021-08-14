@@ -19,7 +19,8 @@ yes = "✅"
 no = "❎"
 
 
-versione = '2.4'
+versione = '2.5'
+latestver = wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latestversion')
 
 
 #config reading  
@@ -119,15 +120,14 @@ bot.remove_command('help')
 @bot.event
 async def on_ready():
     print(bcolors.OKGREEN)
-    print(" __      __        .__   __              /\\          _________      .__   ________.           __   ")
-    print("/  \\    /  \\_____  |  |_/  |_  __________)/ ______  /   _____/ ____ |  |_/ ____\\_ |__   _____/  |_ ")
-    print("\\   \\/\\/   /\\__  \\ |  |\\   __\\/ __ \\_  __ \\/  ___/  \\_____  \\_/ __ \\|  |\\   __\\ | __ \\ /  _ \\   __\\")
-    print(" \\        /  / __ \\|  |_|  | \\  ___/|  | \\/\\___ \\   /        \\  ___/|  |_|  |   | \\_\\ (  <_> )  |  ")
-    print("  \\__/\\  /  (____  /____/__|  \\___  >__|  /____  > /_______  /\\___  >____/__|   |___  /\\____/|__|  ")
-    print("       \\/        \\/               \\/           \\/          \\/     \\/                \\/             ")
+    print('      _                _      _                _  __ _           _   ')
+    print('     | |              | |    ( )              | |/ _| |         | |  ')
+    print('   __| |_ __ _ __ __ _| |_ ___/ ___   ___  ___| | |_| |__   ___ | |_ ')
+    print("  / _` | '__| '__/ _` | __/ _ \ / __| / __|/ _ \ |  _| '_ \ / _ \| __|")
+    print(' | (_| | |  | | | (_| | |_  __/ \__ \ \__ \  __/ | | | |_) | (_) | |_ ')
+    print('  \__,_|_|  |_|  \__,_|\__\___| |___/ |___/\___|_|_| |_.__/ \___/ \__|')
     print(bcolors.ENDC)
     r = requests.get('https://raw.githubusercontent.com/ProYT303/walterselfbot/main/ver').content.decode("utf8")
-
     print(f'{bcolors.OKBLUE}Logged in as {bot.user.name}#{bot.user.discriminator}{bcolors.ENDC}, {bcolors.OKGREEN}Version: {versione}, Newest : {r}{bcolors.ENDC}')
     global start_time
     start_time = time.time()
@@ -157,25 +157,14 @@ async def help(ctx):
         print(bcolors.WARNING + "No delete perms" + bcolors.ENDC)
 
     if randomizecolor:
-        embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
+        embed = discord.Embed(color=discord.Color.random(), description=f"Prefix: {prefix} | drrate's selfbot - https://github.com/drrate/drrateselfbot | Tehc Suport : https://discord.gg/AEcQ9SjnX9")
     else:
-        embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/ProYT303/walterselfbot | Tehc Suport : https://discord.gg/kuSzstZyFf")
+        embed = discord.Embed(color=embedcolor, description=f"Prefix: {prefix} | Walter's selfbot - https://github.com/drrate/drrateselfbot | Tehc Suport : https://discord.gg/AEcQ9SjnX9")
     embed.add_field(name="utilities", value="ping,spam,imageembed,embed,avatar,nitro,webhook,playing,watching,listening,streaming,statusclear,ghostping,dmspam,dmall,loopstatus,disableloopstatus,loopnick,status_sync,disablestatus_sync", inline=False)
     embed.add_field(name="media", value="trump,recaptcha,clyde,deepfry,bobux,dog,minecraft,corona,proxy,meme", inline=True)
     embed.add_field(name="etc", value="shutdown,website,coinflip,uptime,loopnick,disableloopnick,predictgender,lag,bitcoin,pi", inline=True)
     embed.add_field(name="moderation", value=r'purge,purgeall,nick', inline=True)
     embed.add_field(name="dogecoin", value=r'dogetotal,dogebal,dogediff ', inline=True)
- # help command        
-#
-#
-#
- #
-#
-#
-#
-#
-#
- #       
     await ctx.send(embed=embed)  
 
 @bot.command( aliases=['ghostspam'])
