@@ -24,6 +24,10 @@ latestver = wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfb
 if latestver > versione:
     print("Selfbot is out of date, updating....")
     wget.download('https://ghcdn.rawgit.org/drrate/cdn1/main/drrateselfbot/latest/index.py-1')
+    os.rename('index.py','index-old.py')
+    os.rename('index.py-1','index.py')
+    os.system('py -3 index.py')
+    exit()
 
 #config reading  
 
