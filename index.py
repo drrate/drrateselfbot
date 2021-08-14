@@ -58,7 +58,7 @@ try:
 
     config = json.loads(config) 
 except:
-    print("config.json isnt in the folder, terminating ( for help, go https://discord.gg/kuSzstZyFf or https://discord.io/walters )")
+    print("Config is not set up, please go to https://drrateselfbot.drratedevelopment.tk/setup.")
     time.sleep(5)
     exit()
 class bcolors:
