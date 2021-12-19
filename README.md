@@ -1,10 +1,4 @@
-# drrate's Selfbot.
+# **Archived!**
+I don't want to do anything with this anymore for the very fact that it breaks Discord's ToS, and by typing this, I will not be much help if you want to make a fork of this. 
 
-
-https://drrateselfbot.drratedevelopment.tk
-
-Docker Version : [in progress]
-
-I don't give a fuck if you have been banned because of this. Selfbots are against Discord's ToS.
-
-if there was errors, pull a request to fix it, easy.
+I don't really care also if you do, just don't get me in trouble if you get banned for your very actions.
